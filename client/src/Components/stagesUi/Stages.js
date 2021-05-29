@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 
-function Stages() {
+function Stages(props) {
     const [stages, setStages] = useState(["Stage_1", "Stage_2", "Stage_3"]);
     const [newStage, setNewStage] = useState();
-    const handleChangeAdd = ()=>{
-        setStages([...stages, newStage]);
-    }
+
+
     return (
         <div>
            <label>
             Choose a stage from this list:
             <input list="stages" name={newStage} onChange={(e)=>{setNewStage(e.target.value)}}/>  
-            <button onClick= {handleChangeAdd}>Add</button>
+            {/* <button onClick= {handleChangeAdd}>Add</button> */}
            </label>   
             <datalist id="stages">
                 {stages.map((stage, key)=>{
