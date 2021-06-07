@@ -69,7 +69,7 @@ exports.update = (req, res) => {
 
  Job.updateById(
     req.params.jobId,
-    newJob(req.body),
+    req.body,
     (err, data) => {
       if (err) {
         if (err.kind === "not_found") {

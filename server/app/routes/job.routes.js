@@ -17,5 +17,5 @@ module.exports = app => {
     app.delete("/jobs/:jobId", jobs.delete);
   
     // Create a new Job
-    app.delete("/jobs", jobs.deleteAll);
+    app.delete("/jobs/remove", jobs.deleteAll);
   };

@@ -8,14 +8,15 @@ exports.create = (req, res) => {
       message: "Content can not be empty!"
     });
   }
+  console.log(req);
 
   // Create a Customer
   const stage = new Stage({
-    name: req.body.name,
-    
-    
+    stageName: req.body.stageName,
+    jobId : req.body.jobId,
+    stageId : req.body.stageId
   });
-
+  console.log(stage);
   // Save Customer in the database
   Stage.create(stage, (err, data) => {
     if (err)
@@ -29,7 +30,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Customers from the database.
 exports.findAll = (req, res) => {
-  Stage.getAll((err, data) => {
+  Stage.getAll( (err, data) => {
     if (err)
       res.status(500).send({
         message:
@@ -41,15 +42,15 @@ exports.findAll = (req, res) => {
 
 // Find a single Stage with a customerId
 exports.findOne = (req, res) => {
-  Stage.findById(req.params.stageId, (err, data) => {
+  Stage.findById(req.params.jobId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found stage with id ${req.params.stageId}.`
+          message: `Not found stage with job id ${req.params.jobId}.`
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving stage with id " + req.params.stageId
+          message: "Error retrieving stage with job id " + req.params.jobId
         });
       }
     } else res.send(data);
@@ -69,7 +70,7 @@ exports.update = (req, res) => {
 
  Stage.updateById(
     req.params.stageId,
-    newStage(req.body),
+    req.body,
     (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
@@ -105,7 +106,19 @@ exports.delete = (req, res) => {
 
 // Delete allStages from the database.
 exports.deleteAll = (req, res) => {
-  Stage.removeAll((err, data) => {
+  Stage.removeAll(req.params.jobId, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while removing all Stages."
+      });
+    else res.send({ message: `All Stages were deleted successfully!` });
+  });
+};
+
+//delete all stages
+exports.deleteAllStages = (req, res) => {
+  Stage.removeAllStages((err, data) => {
     if (err)
       res.status(500).send({
         message:

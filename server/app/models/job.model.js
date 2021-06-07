@@ -4,7 +4,7 @@ const sql = require("./db.js");
 const Job = function(job) {
   this.name = job.name;
   this.description = job.description;
-  
+  this.Id = job.Id;
 };
 
 Job.create = (newJob, result) => {
@@ -54,8 +54,8 @@ Job.getAll = result => {
 
 Job.updateById = (Id, job, result) => {
   sql.query(
-    "UPDATE jobs SET name = ?, description = ? WHERE Id = ?",
-    [job.email, job.name, Id],
+    "UPDATE jobs SET name = ? WHERE Id = ?",
+    [job.name, Id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
