@@ -8,7 +8,8 @@ module.exports = app => {
   app.get("/stages", stages.findAll);
 
   // Retrieve a single Stage with stageId
-  app.get("/stages/:stageId", stages.findOne);
+  //app.get("/stages/:stageId", stages.findOne);
+  app.get("/stages/:jobId", stages.findOne);
 
   // Update a Stage with stageId
   app.put("/stages/:stageId", stages.update);
@@ -17,5 +18,7 @@ module.exports = app => {
   app.delete("/stages/:stageId", stages.delete);
 
   // Create a new Stage
-  app.delete("/stages", stages.deleteAll);
+  app.delete("/stages/remove/:jobId", stages.deleteAll);
+  //remove all stages
+  app.delete("/stages/remove/", stages.deleteAllStages);
 };
