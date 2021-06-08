@@ -1,5 +1,25 @@
 const Stage = require("../models/stage.model.js");
 
+// create all stages
+
+exports.createAllStages = async(stageList, jobId) => {
+  if(stageList.length==0) return;
+  for(stageName in stageList)
+  {  const stageEntry = {
+      stageName: stageName,
+      jobId : jobId,
+    }
+   await Stage.create(stageEntry,  (err, data) => {
+      if (err)
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while creating the jaob."
+        });
+      else res.send(data);
+    })
+  }
+}
+
 // Create and Save a new Customer
 exports.create = (req, res) => {
   // Validate request
@@ -102,6 +122,7 @@ exports.delete = (req, res) => {
       }
     } else res.send({ message: `stage was deleted successfully!` });
   });
+
 };
 
 // Delete allStages from the database.

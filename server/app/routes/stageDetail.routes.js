@@ -10,4 +10,5 @@ module.exports = app => {
   // update Stage Detail
   app.put("/stageDetail/:jobId/:stageId/:stageDetailId", stageDetail.updateStageDetail);
   // delete
+  app.delete("/stageDetail/:jobId/:stageId/:stageDetailId", stageDetail.delete);
 };
