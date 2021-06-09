@@ -14,18 +14,17 @@ exports.createStage = async (req, res) => {
   }
 
   const stages = req.body;
-
+ // console.log(stages);
   
     //create stage table ----------------------------------
-    await jobController.createJob(jobName);
-  //const createStage =  await  stageDetail.createStage("stage_table");
+   // await jobController.createJob(jobName);
+    // const createStage =  await  stageDetail.createStage("stage_table");
 
     // find stage name -----------------------------------
   const findStage= [];
   for(name in stages) {
     findStage.push(name);
   }
-  await stagesController.createAllStages(findStage, 1);
   
    // create stageDetail ------------------------
   try{
@@ -101,9 +100,9 @@ exports.delete = (req, res) => {
         stageRecordNew.stageDetailId =stageDetailId;
         stageRecordNew.property = column;
         stageRecordNew.property_value = data[column];
-        console.log("\nrecord == ", stageRecordNew);
+        //console.log("\nrecord == ", stageRecordNew);
         const createStageRecord =  await stageDetail.createStageRecord("stage_table", stageRecordNew);
-          Promise.all(createStageRecord);
+         // Promise.all(createStageRecord);
       }
     } catch (err){
       console.log(err);

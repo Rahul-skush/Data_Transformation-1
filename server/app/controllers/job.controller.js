@@ -1,7 +1,23 @@
 const Job = require("../models/job.model.js");
 
+
+// create new job from request
+exports.createJob = async(req, res, next) => {
+    // Validate request
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  }
+
+  if(req.jobName) next();
+}
+
+
+
+
 // Create and Save a new Customer
-exports.create = (req, res) => {
+exports.create = async (req, res, next) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({

@@ -2,22 +2,30 @@ const Stage = require("../models/stage.model.js");
 
 // create all stages
 
-exports.createAllStages = async(stageList, jobId) => {
-  if(stageList.length==0) return;
-  for(stageName in stageList)
+exports.createAllStages = async(req, res, next) => {
+  const stages = req.body;
+
+  const findStage= [];
+  for(name in stages) {
+    findStage.push(name);
+  }
+
+  if(findStage.length==0) return;
+  for(stageName in findStage)
   {  const stageEntry = {
-      stageName: stageName,
-      jobId : jobId,
+      stageName: findStage[stageName],
+      jobId : 1,
     }
+   // req.body.findStage[stageName].stageId = 303;
    await Stage.create(stageEntry,  (err, data) => {
       if (err)
         res.status(500).send({
           message:
-            err.message || "Some error occurred while creating the jaob."
+            err.message || "Some error occurred while creating the job."
         });
-      else res.send(data);
     })
   }
+  next();
 }
 
 // Create and Save a new Customer
