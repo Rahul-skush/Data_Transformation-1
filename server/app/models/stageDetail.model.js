@@ -21,7 +21,6 @@ stageDetail.createStage = (req, result) => {
 
 stageDetail.createStageRecord = (stageName, req, res) => {
   let qry = "INSERT INTO " + stageName + " SET ?";
-  console.log(qry);
   sql.query(qry, req, (err, res) => {
     if (err) {
       console.log("error: ", err);
