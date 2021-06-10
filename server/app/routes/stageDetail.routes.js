@@ -5,6 +5,7 @@ module.exports = app => {
 
   // Create a new stageDetails in job
   app.post("/stageDetail", stagesController.createAllStages, stageDetail.createStage);
+  //app.post("/stageDetail", stagesController.createStageDetail);
 
   // get all stageDetails
   app.get("/stageDetail", stageDetail.getAll);
@@ -13,4 +14,13 @@ module.exports = app => {
   app.put("/stageDetail/:jobId/:stageId/:stageDetailId", stageDetail.updateStageDetail);
   // delete
   app.delete("/stageDetail/:jobId/:stageId/:stageDetailId", stageDetail.delete);
+
+
+
+
+
+  //app.post("/stageDetail", stagesController.createAllStageNames, stageDetail.createStageDetail);
+
+
+
 };

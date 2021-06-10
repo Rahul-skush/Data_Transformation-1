@@ -1,11 +1,31 @@
 const sql = require("./db.js");
-
-// constructor
+ /* og constructor
+  // constructor
 const Stage = function(stage) {
   this.stageName = stage.stageName;
   this.jobId = stage.jobId;
   this.stageId = stage.stageId;
 };
+*/
+
+
+
+
+// constructor (for testing)
+const Stage = function(stage) {
+  this.stageName = stage.stageName;
+  this.jobId = stage.jobId;
+ // this.stageId = stage.stageId;
+};
+
+
+
+
+
+
+
+
+
 
 Stage.create = (newStage, result) => {
   sql.query("INSERT INTO stages SET ?", newStage, (err, res) => {
@@ -16,7 +36,11 @@ Stage.create = (newStage, result) => {
     }
 
     console.log("created stage: ", { Id: res.insertId, ...newStage });
+    //console.log(res.insertId)
+  
     result(null, { Id: res.insertId, ...newStage });
+    
+    
   });
 };
 
@@ -77,7 +101,8 @@ Stage.updateById = (stageId, stage, result) => {
 };
 
 Stage.remove = (stageId, result) => {
-  sql.query("DELETE FROM stages WHERE stageId = ?", stageId, (err, res) => {
+  sql.query("DELETE FROM stages WHERE Id = ?", stageId, (err, res) => {
+
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -119,6 +144,54 @@ Stage.removeAllStages = (result) => {
     console.log(`deleted ${res.affectedRows} stages`);
     result(null, res);
   });
+
+
+
+
+  
+
+
+
+  /////////----------------------------------------------------------------------------------
+
+ 
+
+Stage.createStage = (newStage, result) => {
+  sql.query("INSERT INTO stages SET ?", newStage, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    console.log("created stage: ", { Id: res.insertId, ...newStage });
+    console.log(res.insertId)
+    newStage.stageId=res.insertId;
+   
+    result(null, { Id: res.insertId, ...newStage });
+    
+    
+  });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
 module.exports = Stage;
