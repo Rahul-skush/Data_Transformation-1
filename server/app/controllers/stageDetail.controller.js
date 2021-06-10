@@ -7,6 +7,8 @@ const stagesController = require("./stage.controller");
 
 exports.createStage = async (req, res) => {
   // Validate request ----------------------------
+
+
   if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!"
@@ -14,7 +16,7 @@ exports.createStage = async (req, res) => {
   }
 
   const stages = req.body;
- // console.log(stages);
+
   
     //create stage table ----------------------------------
    // await jobController.createJob(jobName);
@@ -29,11 +31,14 @@ exports.createStage = async (req, res) => {
    // create stageDetail ------------------------
   try{
     var k =101;
+    console.log(`checking ${k}`)
     for(var i=0; i<findStage.length; i++) {
       for(var j=0; j<findStage[i].length; j++){
+        //console.log(stages[findStage[i]][j])
+        k=res.locals.stages[i].Id
       await insertFunction(stages[findStage[i]][j], j, k, 1);
       }
-      k++;
+     // k++;
     }
     res.status(200).send({
       message: "entery successfully"
@@ -83,6 +88,7 @@ try{
 
 //  *************************delete stageDetails***************************************
 exports.delete = (req, res) => {
+  console.log("jjjjjjjjj")
   deleteFunction(req.params, res);
  };
 // ***************************END of delete stageDetails*************************************
@@ -131,6 +137,11 @@ exports.delete = (req, res) => {
 }
 
 
-//ishika ke controllers
+//ishika ke controllers ---------------------------------------------------------------------------------------
+//=========================================================================================================
 
 
+
+
+
+ 
