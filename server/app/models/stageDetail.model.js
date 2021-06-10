@@ -57,8 +57,17 @@ stageDetail.updateById = async (reqParams, reqBody, result) => {
 
 stageDetail.remove = async (reqParams, result) => {
   console.log(reqParams);
-  let qryDelete = "DELETE FROM stage_table " + " WHERE stageDetailId = " + reqParams.stageDetailId +
+let qryDelete = " DELETE FROM stageDetailTable WHERE "  ;
+if(reqParams.stageDetailId && reqParams.jobId && reqParams.stageId)
+{
+  qryDelete+="  stageDetailId = " + reqParams.stageDetailId +
   " AND stageId = " + reqParams.stageId + " AND jobId = " + reqParams.jobId ;
+}
+
+else {
+  qryDelete+=" stageId = " + reqParams.stageId;
+}
+  
   console.log(qryDelete);
   try{
     await sql.query(qryDelete, (err, res) => {
@@ -83,9 +92,19 @@ stageDetail.remove = async (reqParams, result) => {
 }
 
 
-// ishika ke modules
+// ishika ke modules =============================================================================
 
-
+stageDetail.createStageRecordDetails = (stageName, req, res) => {
+  let qry = "INSERT INTO " + stageName + " SET ?";
+  sql.query(qry, req, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+    else {console.log("success")}
+  });
+}
 
 
 module.exports = stageDetail;
