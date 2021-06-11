@@ -83,6 +83,4 @@ stageDetail.remove = async (reqParams, result) => {
   }
 };
 
-// ishika ke modules =============================================================================
-
 module.exports = stageDetail;

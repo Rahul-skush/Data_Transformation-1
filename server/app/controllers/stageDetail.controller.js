@@ -1,10 +1,10 @@
 const stageDetail = require("../models/stageDetail.model.js");
 const stagesController = require("./stage.controller");
 
-// create stage ******************************
+// create stage
 
 exports.createStage = async (req, res) => {
-  // Validate request ----------------------------
+  // Validate request 
 
   if (!req.body) {
     res.status(400).send({
@@ -14,13 +14,13 @@ exports.createStage = async (req, res) => {
 
   const stages = req.body;
 
-  // find stage name -----------------------------------
+  // find stage name 
   const findStage = [];
   for (name in stages) {
     findStage.push(name);
   }
 
-  // create stageDetail ------------------------
+  // create stageDetail
   try {
     var k = 101;
     console.log(`checking ${k}`);
@@ -46,7 +46,7 @@ exports.createStage = async (req, res) => {
 
 // **********************************
 
-// ********************get all stageDetails ***************************
+//get all stageDetails
 exports.getAll = async (req, res, next) => {
   try {
     await stageDetail.getAll(req, (err, data) => {
@@ -61,9 +61,9 @@ exports.getAll = async (req, res, next) => {
     console.log(err);
   }
 };
-// **************************END of get all stageDetails*******************************
+//END of get all stageDetails
 
-//  *************************update stageDetails***************************************
+//update stageDetails
 exports.updateStageDetail = async (req, res, next) => {
   if (
     !req.params.stageDetailId ||
@@ -88,18 +88,18 @@ exports.updateStageDetail = async (req, res, next) => {
     console.log(err);
   }
 };
-// ************************END of update stageDetails****************************************
+//END of update stageDetails
 
-//  *************************delete stageDetails***************************************
+//delete stageDetails
 exports.delete = (req, res) => {
   console.log("jjjjjjjjj");
   deleteFunction(req.params, res);
 };
-// ***************************END of delete stageDetails*************************************
+//END of delete stageDetails
 
-// *************************** helper functions*************************************
+// helper functions
 
-// insert stageDetails into table ---------------------
+// insert stageDetails into table 
 const insertFunction = async (data, stageDetailId, stageId, jobId) => {
   try {
     for (column in data) {
@@ -140,6 +140,3 @@ const deleteFunction = async (reqParams, res) => {
     console.log(err);
   }
 };
-
-//ishika ke controllers ---------------------------------------------------------------------------------------
-//=========================================================================================================

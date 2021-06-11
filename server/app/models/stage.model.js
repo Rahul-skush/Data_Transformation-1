@@ -1,13 +1,5 @@
 const sql = require("./db.js");
 const tableConfig = require("../config/table.config.js");
-/* og constructor
-  // constructor
-const Stage = function(stage) {
-  this.stageName = stage.stageName;
-  this.jobId = stage.jobId;
-  this.stageId = stage.stageId;
-};
-*/
 
 // constructor (for testing)
 const Stage = function (stage) {
@@ -141,8 +133,6 @@ Stage.removeAllStages = (result) => {
     console.log(`deleted ${res.affectedRows} stages`);
     result(null, res);
   });
-
-  /////////----------------------------------------------------------------------------------
 
   Stage.createStage = (newStage, result) => {
     sql.query("INSERT INTO stages SET ?", newStage, (err, res) => {

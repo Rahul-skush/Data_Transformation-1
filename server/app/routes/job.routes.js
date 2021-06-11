@@ -20,5 +20,4 @@ module.exports = app => {
     app.delete("/jobs/remove", jobs.deleteAll);
 
 
-    //ishika ke routes
   };
