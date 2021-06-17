@@ -1,34 +1,15 @@
 const sql = require("./db.js");
- /* og constructor
-  // constructor
-const Stage = function(stage) {
-  this.stageName = stage.stageName;
-  this.jobId = stage.jobId;
-  this.stageId = stage.stageId;
-};
-*/
-
-
-
+const tableConfig = require("../config/table.config.js");
 
 // constructor (for testing)
-const Stage = function(stage) {
+const Stage = function (stage) {
   this.stageName = stage.stageName;
   this.jobId = stage.jobId;
- // this.stageId = stage.stageId;
+  // this.stageId = stage.stageId;
 };
 
-
-
-
-
-
-
-
-
-
 Stage.create = (newStage, result) => {
-  sql.query("INSERT INTO stages SET ?", newStage, (err, res) => {
+  sql.query(`INSERT INTO ${tableConfig.STAGES} SET ?`, newStage, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -37,35 +18,36 @@ Stage.create = (newStage, result) => {
 
     console.log("created stage: ", { Id: res.insertId, ...newStage });
     //console.log(res.insertId)
-  
+
     result(null, { Id: res.insertId, ...newStage });
-    
-    
   });
 };
 
 Stage.findById = (jobId, result) => {
-  sql.query(`SELECT * FROM stages WHERE jobId = ${jobId}`, (err, res) => {
-    console.log("yahan aya");
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
+  sql.query(
+    `SELECT * FROM ${tableConfig.STAGES} WHERE jobId = ${jobId}`,
+    (err, res) => {
+      console.log("yahan aya");
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
 
-    if (res.length) {
-      console.log("found stage: ", res);
-      result(null, res);
-      return;
-    }
+      if (res.length) {
+        console.log("found stage: ", res);
+        result(null, res);
+        return;
+      }
 
-    // not found Stage with the Id
-    result({ kind: "not_found" }, null);
-  });
+      // not found Stage with the Id
+      result({ kind: "not_found" }, null);
+    }
+  );
 };
 
-Stage.getAll = result => {
-  sql.query("SELECT * FROM stages", (err, res) => {
+Stage.getAll = (result) => {
+  sql.query(`SELECT * FROM ${tableConfig.STAGES}`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -79,7 +61,7 @@ Stage.getAll = result => {
 
 Stage.updateById = (stageId, stage, result) => {
   sql.query(
-    "UPDATE stages SET stageName = ? WHERE stageId = ?",
+    `UPDATE ${tableConfig.STAGES} SET stageName = ? WHERE stageId = ?`,
     [stage.stageName, stageId],
     (err, res) => {
       if (err) {
@@ -101,40 +83,47 @@ Stage.updateById = (stageId, stage, result) => {
 };
 
 Stage.remove = (stageId, result) => {
-  sql.query("DELETE FROM stages WHERE Id = ?", stageId, (err, res) => {
+  sql.query(
+    `DELETE FROM ${tableConfig.STAGES} WHERE Id = ?`,
+    stageId,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
 
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
+      if (res.affectedRows == 0) {
+        // not found Stages with the Id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("deleted stage with Id: ", stageId);
+      result(null, res);
     }
-
-    if (res.affectedRows == 0) {
-      // not found Stages with the Id
-      result({ kind: "not_found" }, null);
-      return;
-    }
-
-    console.log("deleted stage with Id: ", stageId);
-    result(null, res);
-  });
+  );
 };
 
 Stage.removeAll = (jobId, result) => {
-  sql.query("DELETE FROM stages WHERE jobId = ?", jobId, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
+  sql.query(
+    `DELETE FROM ${tableConfig.STAGES} WHERE jobId = ?`,
+    jobId,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
 
-    console.log(`deleted ${res.affectedRows} stages`);
-    result(null, res);
-  });
+      console.log(`deleted ${res.affectedRows} stages`);
+      result(null, res);
+    }
+  );
 };
 
 Stage.removeAllStages = (result) => {
-  sql.query("DELETE FROM stages", (err, res) => {
+  sql.query(`DELETE FROM ${tableConfig.STAGES}`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -145,53 +134,21 @@ Stage.removeAllStages = (result) => {
     result(null, res);
   });
 
+  Stage.createStage = (newStage, result) => {
+    sql.query("INSERT INTO stages SET ?", newStage, (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
 
+      console.log("created stage: ", { Id: res.insertId, ...newStage });
+      console.log(res.insertId);
+      newStage.stageId = res.insertId;
 
-
-  
-
-
-
-  /////////----------------------------------------------------------------------------------
-
- 
-
-Stage.createStage = (newStage, result) => {
-  sql.query("INSERT INTO stages SET ?", newStage, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-
-    console.log("created stage: ", { Id: res.insertId, ...newStage });
-    console.log(res.insertId)
-    newStage.stageId=res.insertId;
-   
-    result(null, { Id: res.insertId, ...newStage });
-    
-    
-  });
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      result(null, { Id: res.insertId, ...newStage });
+    });
+  };
 };
 
 module.exports = Stage;

@@ -8,7 +8,6 @@ module.exports = app => {
   app.get("/stages", stages.findAll);
 
   // Retrieve a single Stage with stageId
-  //app.get("/stages/:stageId", stages.findOne);
   app.get("/stages/:jobId", stages.findOne);
 
   // Update a Stage with stageId

@@ -2,122 +2,69 @@ const Stage = require("../models/stage.model.js");
 
 // create all stages
 
-exports.createAllStages = async(req, res, next) => {
+exports.createAllStages = async (req, res, next) => {
   const stages = req.body;
-//console.log(stages)
+  //console.log(stages)
 
-  const findStage= [];
-  const stageNames =[];
-  for(name in stages) {
+  const findStage = [];
+  const stageNames = [];
+  for (name in stages) {
     findStage.push(name);
   }
 
-  if(findStage.length==0) return;
-  var i=0;
-  for(stageName in findStage)
-  {  var stageEntry = {
+  if (findStage.length == 0) return;
+  for (stageName in findStage) {
+    var stageEntry = {
       stageName: findStage[stageName],
-      jobId : 1,
-      
-    }
-   // req.body.findStage[stageName].stageId = 303;
-   await Stage.create(stageEntry,  (err, data) => {
+      jobId: 1,
+    };
+    // req.body.findStage[stageName].stageId = 303;
+    await Stage.create(stageEntry, (err, data) => {
       if (err)
         res.status(500).send({
-          message:
-            err.message || "Some error occurred while creating the job."
+          message: err.message || "Some error occurred while creating the job.",
         });
-//console.log(data.Id)
-stageNames.push(data);
-/*
-stageEntry.stageId=data.Id
-console.log(stageEntry)
-res.locals.stageId=data.Id
-res.locals.occurence=i;
-console.log(res.locals.occurence);
-next();
-*/
-//async next();
-//console.log(`************************ ${i}`)
-// if(i==3){
-//  res.locals.stages=stageNames
-//  next();
-
-//  }
-//res.locals.stages=stageNames
- //next();
- //console.log(stageNames)
-if(stageNames.length===findStage.length)
-{
-  res.locals.stages=stageNames;
-  next();
-}
-
- })
- 
-    i++;
-   
+      stageNames.push(data);
+      if (stageNames.length === findStage.length) {
+        res.locals.stages = stageNames;
+        next();
+      }
+    });
   }
-//console.log("testing")
-//console.log(res.locals)
- // next();
-}
+};
 
 // Create and Save a new Customer
 exports.create = (req, res) => {
   // Validate request
- // console.log(req)
-//console.log(`Creating a stage ${req}`)
 
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty!",
     });
   }
-
-  //console.log("In .create method")
-  //console.log(req);
 
   // Create a Customer
   const stage = new Stage({
     stageName: req.body.stageName,
-    jobId : req.body.jobId,
-    //stageId : req.body.stageId                     //not needed
+    jobId: req.body.jobId,
   });
   console.log(stage);
   // Save Customer in the database
   Stage.create(stage, (err, data) => {
     if (err)
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the jaob."
+        message: err.message || "Some error occurred while creating the jaob.",
       });
     else res.send(data);
   });
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Retrieve all Customers from the database.
 exports.findAll = (req, res) => {
-  Stage.getAll( (err, data) => {
+  Stage.getAll((err, data) => {
     if (err)
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving Stages."
+        message: err.message || "Some error occurred while retrieving Stages.",
       });
     else res.send(data);
   });
@@ -129,11 +76,11 @@ exports.findOne = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found stage with job id ${req.params.jobId}.`
+          message: `Not found stage with job id ${req.params.jobId}.`,
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving stage with job id " + req.params.jobId
+          message: "Error retrieving stage with job id " + req.params.jobId,
         });
       }
     } else res.send(data);
@@ -145,54 +92,47 @@ exports.update = (req, res) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty!",
     });
   }
 
   console.log(req.body);
 
- Stage.updateById(
-    req.params.stageId,
-    req.body,
-    (err, data) => {
-      if (err) {
-        if (err.kind === "not_found") {
-          res.status(404).send({
-            message: `Not foundStage with id ${req.params.stageId}.`
-          });
-        } else {
-          res.status(500).send({
-            message: "Error updating stage with id " + req.params.stageId
-          });
-        }
-      } else res.send(data);
-    }
-  );
-};
-
-// Delete a stage with the specified stageId in the request
-exports.delete = async (req, res,next) => {
- Stage.remove(req.params.stageId, (err, data) => {
+  Stage.updateById(req.params.stageId, req.body, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not foundStage with id ${req.params.stageId}.`
+          message: `Not foundStage with id ${req.params.stageId}.`,
         });
       } else {
         res.status(500).send({
-          message: "Could not deleteStage with id " + req.params.stageId
+          message: "Error updating stage with id " + req.params.stageId,
         });
       }
-    } 
-//delete karenge
+    } else res.send(data);
+  });
+};
+
+// Delete a stage with the specified stageId in the request
+exports.delete = async (req, res, next) => {
+  Stage.remove(req.params.stageId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not foundStage with id ${req.params.stageId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Could not deleteStage with id " + req.params.stageId,
+        });
+      }
+    }
+    //delete karenge
     else {
-      
       next();
       res.send({ message: `stage was deleted successfully!` });
-  
-}
+    }
   });
-
 };
 
 // Delete allStages from the database.
@@ -201,99 +141,22 @@ exports.deleteAll = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all Stages."
+          err.message || "Some error occurred while removing all Stages.",
       });
     else {
-      
-      res.send({ message: `All Stages were deleted successfully!` });}
+      res.send({ message: `All Stages were deleted successfully!` });
+    }
   });
 };
 
-//delete all stages   
+//delete all stages
 exports.deleteAllStages = (req, res) => {
   Stage.removeAllStages((err, data) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all Stages."
+          err.message || "Some error occurred while removing all Stages.",
       });
     else res.send({ message: `All Stages were deleted successfully!` });
   });
-
-
-//-------------------------------------------------
-
-
-exports.createAllStageNames = async(req, res, next) => {
-  const stages = req.body;
-
-  const findStage= [];
-  for(name in stages) {
-    findStage.push(name);
-  }
-
-  if(findStage.length==0) return;
-  for(stageName in findStage)
-  {  const stageEntry = {
-      stageName: findStage[stageName],
-      jobId : 1,
-     
-    }
-   // req.body.findStage[stageName].stageId = 303;
-   await Stage.createStage(stageEntry,  (err, data) => {
-      if (err)
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while creating the job."
-        });
-        console.log("I am in controller")
-        console.log(data)
-        req.stageId =data.Id;
-    })
-  
-  next();
-  }
-}
-
-// Create and Save a new Customer
-exports.createStage = (req, res) => {
-  // Validate request
-  if (!req.body) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-  }
-  console.log(req);
-
-  // Create a Customer
-  const stage = new Stage({
-    stageName: req.body.stageName,
-    jobId : req.body.jobId,
-    //stageId : req.body.stageId
-  });
-  console.log(stage);
-  // Save Customer in the database
-  Stage.createStage(stage, (err, data) => {
-    if (err)
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the jaob."
-      });
-    else res.send(data);
-  });
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 };
