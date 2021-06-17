@@ -83,4 +83,30 @@ stageDetail.remove = async (reqParams, result) => {
   }
 };
 
+
+stageDetail.findById = (stageId, result) => {
+  sql.query(`SELECT * FROM stageDetailTable WHERE stageId = ${stageId}`, (err, res) => {
+    console.log("yahan aya");
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found stage: ", res);
+      result(null, res);
+      return;
+    }
+
+    // not found Stage detail with the Id
+    result({ kind: "not_found" }, null);
+  });
+};
+
+
+
+
+
+
 module.exports = stageDetail;
