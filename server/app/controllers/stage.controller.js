@@ -16,7 +16,7 @@ exports.createAllStages = async (req, res, next) => {
   for (stageName in findStage) {
     var stageEntry = {
       stageName: findStage[stageName],
-      jobId: 1,
+      jobId: 17,
     };
     // req.body.findStage[stageName].stageId = 303;
     await Stage.create(stageEntry, (err, data) => {
@@ -113,7 +113,7 @@ exports.update = (req, res) => {
   });
 };
 
-// Delete a stage with the specified stageId in the request
+// Delete a stage and stageDetails with the specified stageId in the request
 exports.delete = async (req, res, next) => {
   Stage.remove(req.params.stageId, (err, data) => {
     if (err) {
@@ -130,13 +130,36 @@ exports.delete = async (req, res, next) => {
     //delete karenge
     else {
       next();
-      res.send({ message: `stage was deleted successfully!` });
     }
   });
 };
 
+// //Delete a particular stage (Just for testing)
+// exports.deleteStage = async (req, res, next) => {
+//   Stage.remove(req.params.stageId, (err, data) => {
+//     if (err) {
+//       if (err.kind === "not_found") {
+//         res.status(404).send({
+//           message: `Not foundStage with id ${req.params.stageId}.`,
+//         });
+//       } else {
+//         res.status(500).send({
+//           message: "Could not deleteStage with id " + req.params.stageId,
+//         });
+//       }
+//     }
+//     //delete karenge
+//     else {
+    
+//       res.send({ message: `stage was deleted successfully!` });
+//     }
+//   });
+// };
+
+
+
 // Delete allStages from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = (req, res, next) => {
   Stage.removeAll(req.params.jobId, (err, data) => {
     if (err)
       res.status(500).send({
@@ -144,7 +167,8 @@ exports.deleteAll = (req, res) => {
           err.message || "Some error occurred while removing all Stages.",
       });
     else {
-      res.send({ message: `All Stages were deleted successfully!` });
+      next();
+     // res.send({ message: `All Stages were deleted successfully!` });
     }
   });
 };

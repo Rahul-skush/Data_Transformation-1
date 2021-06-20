@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -14,9 +14,10 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-
+import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
 
 import NewStageDetail from './NewStageDetails'
+import axios from 'axios';
 
 
 const useRowStyles = makeStyles({
@@ -25,35 +26,13 @@ const useRowStyles = makeStyles({
       borderBottom: 'unset',
     },
   },
+
+ 
+
 });
 
 
 
-
-function createData(name, calories, fat, carbs, protein, price) {
-    return {
-      name,
-      calories,
-      fat,
-      carbs,
-      protein,
-      price,
-      history: [
-        { date: '2020-01-05', customerId: '11091700', amount: 3 },
-        { date: '2020-01-02', customerId: 'Anonymous', amount: 1 },
-      ],
-    };
-  }
-  
-
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
-    createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
-    createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
-    createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
-  ];
 
 
 
@@ -69,14 +48,49 @@ const Stage = (props) => {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
-  console.log("**")
+  console.log("**Checkin if it's reaching")
 console.log(row)
 
-
+const[rows,setRows]=useState(row);
+// const[nameDisplay,setNameDisplay]=useState({"stageName":rows.name
+// })
     
-    return (
+const deleteStage=(id)=>{
+  console.log("del")
+console.log(id)
+axios.delete(`http://localhost:3000/stages/${id}`).then(()=>{setRows(null)})
+  }
+
+  // const updateStage=(row)=>{
+  //   axios.put(`http://localhost:3000/stages/${row.Id}`,{"stageName":rows.name})
+  //   row.stageName=rows.name
+  // //  row.description=jobs.description
+  //  console.log(row)
+  //  setNameDisplay({"name":jobs.name
+  // })
+  // }
+  
+  // const deleteJob=(id)=>{console.log("del")
+  // console.log(id)
+
+  // const handleStageNameChange=(event)=>{
+  //   console.log(event.target.value);
+  //   const value_name=event.target.value;
+  //   const name=event.target.name;
+  //   console.log(value_name,name)
+  //   setRows(()=>{if(name==='stageName'){return{stageName:value_name}}
+  //   })
+  //  }
+      
+
+
+
+
+return (
+
+<div>{rows?
       <React.Fragment>
-        <TableRow className={classes.root}>
+        <TableRow className={classes.root} className={classes.rowcolor}>
           <TableCell>
             <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -85,6 +99,17 @@ console.log(row)
           <TableCell component="th" scope="row">
             {row.stageName}
           </TableCell>
+
+          {/* <TableCell><input type="text" placeholder = "Edit Stage Name" name="stageName" onChange={handleStageNameChange}></input>
+               <button onClick={()=>updateStage(row)}>Update</button>
+          </TableCell> */}
+
+
+
+          <TableCell>
+          <button onClick={()=>deleteStage(row.Id)}><DeleteOutlineRoundedIcon/></button>
+          
+        </TableCell>
         
         </TableRow>
         <TableRow>
@@ -95,32 +120,15 @@ console.log(row)
                   Stage Detail
                 </Typography>
                 <Table size="small" aria-label="purchases">
-                  <TableHead>
+                  {/* <TableHead>
                     <TableRow>
                       <TableCell>Property</TableCell>
                       <TableCell>Property Value</TableCell>
                       
                     </TableRow>
-                  </TableHead>
+                  </TableHead> */}
                   <TableBody>
-                    {/* {row.history.map((historyRow) => (
-                      <TableRow key={historyRow.date}>
-                        <TableCell component="th" scope="row">
-                          {historyRow.date}
-                        </TableCell>
-                        <TableCell>{historyRow.customerId}</TableCell>
-                        <TableCell align="right">{historyRow.amount}</TableCell>
-                        <TableCell align="right">
-                          {Math.round(historyRow.amount * row.price * 100) / 100}
-                        </TableCell>
-                      </TableRow>
-                    ))} */}
-
-
-                    {/* {row.map((row) => (
-                     <NewStageDetail key={row.Id} row={row}/>
-                    ))} */}
-
+                   
 <NewStageDetail key={row.Id} row={row}/>
                   </TableBody>
                 </Table>
@@ -128,7 +136,9 @@ console.log(row)
             </Collapse>
           </TableCell>
         </TableRow>
-      </React.Fragment>
+      </React.Fragment>:null}</div>
+
+
     
     );
 }

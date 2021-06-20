@@ -13,7 +13,7 @@ module.exports = app => {
   // Update a Stage with stageId
   app.put("/stages/:stageId", stages.update);
 
-  // Delete a Stage with stageId
+  // Delete Stage and all StageDetails with stageId
   app.delete("/stages/:stageId", stages.delete,stageDetail.delete);
 
   // Create a new Stage

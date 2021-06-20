@@ -22,6 +22,14 @@ import axios from 'axios'
 
 
 
+const useRowStyles = makeStyles({
+  head: {
+  // backgroundColor:"#555555"
+  backgroundColor:"#607d8b"
+  },
+});
+
+
 
 export default function CollapsibleTable() {
  
@@ -48,20 +56,21 @@ export default function CollapsibleTable() {
 
 
 
-
+    const classes=useRowStyles();
 
   return (    
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Data Transformation</TableCell>
+        <TableRow className={classes.head}>
+            
+        <TableCell align = 'center'><Typography variant="h5" >Data Transformation</Typography></TableCell>
             
         
           </TableRow>
         </TableHead>
         <TableBody>
+         
           {jobs.map((row) => (
             <New key={row.Id} row={row} />
           ))}

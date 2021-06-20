@@ -14,8 +14,10 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import DeleteOutlineRoundedIcon from '@material-ui/icons/DeleteOutlineRounded';
 
 import NewStage from './NewStage'
+import axios from 'axios';
 
 const useRowStyles = makeStyles({
     root: {
@@ -23,47 +25,26 @@ const useRowStyles = makeStyles({
         borderBottom: 'unset',
       },
     },
+
+    head: {
+      backgroundColor:"#cfd8dc"
+      
+      },
+
+      stage: {
+        backgroundColor:"#747c82"
+        
+        },
+
   });
-
-
-
-
-
-  function createData(name, calories, fat, carbs, protein, price) {
-    return {
-      name,
-      calories,
-      fat,
-      carbs,
-      protein,
-      price,
-      history: [
-        { date: '2020-01-05', customerId: '11091700', amount: 3 },
-        { date: '2020-01-02', customerId: 'Anonymous', amount: 1 },
-      ],
-    };
-  }
-  
-
-
-const l = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
-    createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
-    createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
-    createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
-  ];
-
-
-
 
 
 
 const New = (props) => {
     const { row } = props;
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
-  
+ 
 
     console.log("Checking props")
 console.log(row)
@@ -72,6 +53,9 @@ console.log(row)
   const [ user, setUser ] = useState([]);
   const [ fetchingUser, setFetchingUser ] = useState(true);
   const [ noError, setNoError ] = useState(false);
+  const[jobs,setJobs] = useState(row)
+  const[nameDisplay,setNameDisplay]=useState({"name":row.name,
+"description":row.description})
   
   useEffect(() => {
       const fetchUser = async () => {
@@ -96,57 +80,102 @@ console.log(row)
   }, [])
 
 
-// user.map((user)=>{console.log(user)})
-// console.log("*************")
-// console.log(user)
-
-//
 
 
+const updateJob=(row)=>{
+  axios.put(`http://localhost:3000/jobs/${row.Id}`,{"name":jobs.name,"description":jobs.description})
+ row.name=jobs.name
+ row.description=jobs.description
+// console.log(row)
+setNameDisplay({"name":jobs.name,
+"description":jobs.description})
+}
 
-  
-    return (
+const deleteJob=(id)=>{console.log("del")
+console.log(id)
+
+
+
+  // fetch(`http://localhost:3000/jobs/${id}`, { method: 'DELETE' }).then(()=>{setJobs(null)})
+  axios.delete(`http://localhost:3000/jobs/${id}`).then(()=>{setJobs(null)})
+
+}
+
+const handleJobNameChange=(event)=>{
+console.log(event.target.value);
+const value_name=event.target.value;
+const name=event.target.name;
+console.log(value_name,name)
+setJobs((prevValue)=>{if(name==='jobName'){return{name:value_name,description:prevValue.description}}
+
+else{return{name:prevValue.name ,description:value_name}}
+
+
+})
+
+
+}
+
+    return (<div> {jobs? 
+
+
       <React.Fragment>
-        <TableRow className={classes.root}>
-          <TableCell>
-            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {row.name}
-          </TableCell>
-          <TableCell align="right">{row.description}</TableCell>
+            <Table>
+
+            <TableRow className={classes.head}>
+               <TableCell>
+                 <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                   {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                 </IconButton>
+               </TableCell>
+               <TableCell align="right"><Typography variant="h6">{nameDisplay.name}</Typography></TableCell>
+               
+               <TableCell><div><input type="text" placeholder = "Edit Job Name" name="jobName" onChange={handleJobNameChange}></input>
+               <button onClick={()=>updateJob(row)}>Update</button></div>
+               </TableCell>
+
+               <TableCell align="right"><Typography variant="h6">{nameDisplay.description}</Typography></TableCell>
+
+               <TableCell><div><input type="text" placeholder = "Edit Job Description" name="jobDescription" onChange={handleJobNameChange}></input>
+               <button onClick={()=>updateJob(row)}>Update</button></div>
+               </TableCell>
+
+               <TableCell>
+               <button onClick={()=>deleteJob(row.Id)}> <DeleteOutlineRoundedIcon/></button>
+               </TableCell>
+            <TableCell/>
+             </TableRow>
+              
+             
+              <TableRow className={classes.row}>
+               <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                 <Collapse in={open} timeout="auto" unmountOnExit>
+                   <Box margin={1}>
+                     <Typography variant="h6" gutterBottom component="div">
+                       Stages
+                     </Typography>
+                     <Table size="small" aria-label="purchases">
         
-        </TableRow>
-          
-         <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box margin={1}>
-                <Typography variant="h6" gutterBottom component="div">
-                  Stages
-                </Typography>
-                <Table size="small" aria-label="purchases">
-                  {/* <TableHead>
-                    <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell>Customer</TableCell>
-                      <TableCell align="right">Amount</TableCell>
-                      <TableCell align="right">Total price ($)</TableCell>
-                    </TableRow>
-                  </TableHead> */}
-                  <TableBody>
-                    {user.map((row) => (
-                     <NewStage key={row.Id} row={row}/>
-                    ))}
-                  </TableBody>
-                </Table>
-              </Box>
-            </Collapse>
-          </TableCell>
-        </TableRow> 
-      </React.Fragment>
+                       <TableBody>
+                       
+                         {user.map((row) => (
+                          <NewStage key={row.Id} row={row}/>
+                         ))}
+                       </TableBody>
+                     </Table>
+                   </Box>
+                 </Collapse>
+               </TableCell>
+             </TableRow> 
+
+
+            </Table>
+             
+           </React.Fragment>
+           :null}</div>
+     
+
+
     );
 }
 

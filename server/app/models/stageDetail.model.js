@@ -56,8 +56,10 @@ stageDetail.remove = async (reqParams, result) => {
       reqParams.stageId +
       " AND jobId = " +
       reqParams.jobId;
-  } else {
+  } else if(reqParams.stageId){
     qryDelete += " stageId = " + reqParams.stageId;
+  }else if(reqParams.jobId){
+    qryDelete += " jobId = " + reqParams.jobId;
   }
 
   console.log(qryDelete);

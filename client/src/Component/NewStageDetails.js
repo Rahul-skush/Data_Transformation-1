@@ -21,6 +21,13 @@ const useRowStyles = makeStyles({
       borderBottom: 'unset',
     },
   },
+
+head:{backgroundColor:"#b0bec5"},
+prop:{
+  backgroundColor:"#eeeeee"
+}
+
+
 });
 
 
@@ -84,7 +91,7 @@ console.log(user)
 
 
       <React.Fragment>
-        <TableRow className={classes.root}>
+        <TableRow className={classes.head}>
           <TableCell>
             <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -103,20 +110,20 @@ console.log(user)
                   Stage-Detail
                 </Typography> */}
                 <Table size="small" aria-label="purchases">
-                  {/* <TableHead>
+                  <TableHead>
                     <TableRow>
                       <TableCell>Property</TableCell>
-                      <TableCell>Property Value</TableCell>
+                      <TableCell align='center'>Property Value</TableCell>
                       
                     </TableRow>
-                  </TableHead> */}
+                  </TableHead> 
                   <TableBody>
                     {user.map((historyRow) => (
-                      <TableRow key={historyRow.Id}>
+                      <TableRow key={historyRow.Id} className={classes.prop}>
                         <TableCell component="th" scope="row">
                           {historyRow.property}
                         </TableCell>
-                        <TableCell>{historyRow.property_value}</TableCell>
+                        <TableCell align='center'>{historyRow.property_value}</TableCell>
                         
                       </TableRow>
                     ))}

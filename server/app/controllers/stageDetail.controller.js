@@ -28,7 +28,7 @@ exports.createStage = async (req, res) => {
       for (var j = 0; j < findStage[i].length; j++) {
         //console.log(stages[findStage[i]][j])
         k = res.locals.stages[i].Id;
-        await insertFunction(stages[findStage[i]][j], j, k, 1);
+        await insertFunction(stages[findStage[i]][j], j, k, 17);
       }
       // k++;
     }
@@ -93,7 +93,7 @@ exports.updateStageDetail = async (req, res, next) => {
 //delete stageDetails
 exports.delete = (req, res) => {
   console.log("jjjjjjjjj");
-  deleteFunction(req.params, res);
+   deleteFunction(req.params, res);
 };
 //END of delete stageDetails
 

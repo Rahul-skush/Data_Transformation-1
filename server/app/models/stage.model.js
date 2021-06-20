@@ -61,7 +61,7 @@ Stage.getAll = (result) => {
 
 Stage.updateById = (stageId, stage, result) => {
   sql.query(
-    `UPDATE ${tableConfig.STAGES} SET stageName = ? WHERE stageId = ?`,
+    `UPDATE ${tableConfig.STAGES} SET stageName = ? WHERE Id = ?`,
     [stage.stageName, stageId],
     (err, res) => {
       if (err) {

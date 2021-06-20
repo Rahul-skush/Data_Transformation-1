@@ -17,5 +17,4 @@ module.exports = (app) => {
 //getting all the stageDetails of a particular stage
   app.get("/stageDetail/:stageId",stageDetail.getDetailsOfStage)
 
-
 };
