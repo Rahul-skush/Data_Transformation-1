@@ -84,7 +84,7 @@ Stage.updateById = (stageId, stage, result) => {
 
 Stage.remove = (stageId, result) => {
   sql.query(
-    `DELETE FROM ${tableConfig.STAGES} WHERE Id = ?`,
+    `DELETE FROM ${tableConfig.STAGES} WHERE stageId = ?`,
     stageId,
     (err, res) => {
       if (err) {

@@ -103,7 +103,7 @@ exports.update = (req, res) => {
 };
 
 // Delete a job with the specified jobId in the request
-exports.delete = (req, res) => {
+exports.delete = (req, res, next) => {
  Job.remove(req.params.jobId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
@@ -115,7 +115,10 @@ exports.delete = (req, res) => {
           message: "Could not deleteJob with id " + req.params.jobId
         });
       }
-    } else res.send({ message: `job was deleted successfully!` });
+    } else {
+      next();
+      //res.send({ message: `job was deleted successfully!` });
+    }
   });
 };
 

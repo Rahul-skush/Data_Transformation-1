@@ -130,13 +130,12 @@ exports.delete = async (req, res, next) => {
     //delete karenge
     else {
       next();
-      res.send({ message: `stage was deleted successfully!` });
     }
   });
 };
 
 // Delete allStages from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = (req, res, next) => {
   Stage.removeAll(req.params.jobId, (err, data) => {
     if (err)
       res.status(500).send({
@@ -144,7 +143,8 @@ exports.deleteAll = (req, res) => {
           err.message || "Some error occurred while removing all Stages.",
       });
     else {
-      res.send({ message: `All Stages were deleted successfully!` });
+      next();
+     // res.send({ message: `All Stages were deleted successfully!` });
     }
   });
 };
