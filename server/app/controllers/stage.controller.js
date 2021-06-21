@@ -5,7 +5,7 @@ const Stage = require("../models/stage.model.js");
 exports.createAllStages = async (req, res, next) => {
   const stages = req.body;
   //console.log(stages)
-
+  req.jobId = 35;
   const findStage = [];
   const stageNames = [];
   for (name in stages) {
@@ -16,7 +16,7 @@ exports.createAllStages = async (req, res, next) => {
   for (stageName in findStage) {
     var stageEntry = {
       stageName: findStage[stageName],
-      jobId: 1,
+      jobId: req.jobId,
     };
     // req.body.findStage[stageName].stageId = 303;
     await Stage.create(stageEntry, (err, data) => {
@@ -130,13 +130,12 @@ exports.delete = async (req, res, next) => {
     //delete karenge
     else {
       next();
-      res.send({ message: `stage was deleted successfully!` });
     }
   });
 };
 
 // Delete allStages from the database.
-exports.deleteAll = (req, res) => {
+exports.deleteAll = (req, res, next) => {
   Stage.removeAll(req.params.jobId, (err, data) => {
     if (err)
       res.status(500).send({
@@ -144,7 +143,8 @@ exports.deleteAll = (req, res) => {
           err.message || "Some error occurred while removing all Stages.",
       });
     else {
-      res.send({ message: `All Stages were deleted successfully!` });
+      next();
+     // res.send({ message: `All Stages were deleted successfully!` });
     }
   });
 };
@@ -160,3 +160,6 @@ exports.deleteAllStages = (req, res) => {
     else res.send({ message: `All Stages were deleted successfully!` });
   });
 };
+
+
+

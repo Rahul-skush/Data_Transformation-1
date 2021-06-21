@@ -1,5 +1,7 @@
 module.exports = app => {
     const jobs = require("../controllers/job.controller.js");
+    const stages = require("../controllers/stage.controller.js");
+    const stageDetail = require("../controllers/stageDetail.controller.js");
   
     // Create a new Job
     app.post("/jobs", jobs.create);
@@ -14,7 +16,7 @@ module.exports = app => {
     app.put("/jobs/:jobId", jobs.update);
   
     // Delete a Job with jobId
-    app.delete("/jobs/:jobId", jobs.delete);
+    app.delete("/jobs/:jobId", jobs.delete, stages.deleteAll, stageDetail.delete);
   
     // Create a new Job
     app.delete("/jobs/remove", jobs.deleteAll);

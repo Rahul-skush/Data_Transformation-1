@@ -28,7 +28,7 @@ exports.createStage = async (req, res) => {
       for (var j = 0; j < findStage[i].length; j++) {
         //console.log(stages[findStage[i]][j])
         k = res.locals.stages[i].Id;
-        await insertFunction(stages[findStage[i]][j], j, k, 1);
+        await insertFunction(stages[findStage[i]][j], j, k, req.jobId);
       }
       // k++;
     }
@@ -97,6 +97,33 @@ exports.delete = (req, res) => {
 };
 //END of delete stageDetails
 
+
+
+//Getting all the stage details of a stage
+exports.getDetailsOfStage = (req, res) => {
+  stageDetail.findById(req.params.stageId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Detail with stage id ${req.params.stageId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving Detail with stage id " + req.params.stageId,
+        });
+      }
+    } else res.send(data);
+  });
+};
+//END of getting stage details
+
+
+
+
+
+
+
+
 // helper functions
 
 // insert stageDetails into table 
@@ -140,3 +167,6 @@ const deleteFunction = async (reqParams, res) => {
     console.log(err);
   }
 };
+
+
+

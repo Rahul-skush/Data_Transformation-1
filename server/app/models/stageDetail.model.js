@@ -56,8 +56,10 @@ stageDetail.remove = async (reqParams, result) => {
       reqParams.stageId +
       " AND jobId = " +
       reqParams.jobId;
-  } else {
+  } else if(reqParams.stageId){
     qryDelete += " stageId = " + reqParams.stageId;
+  }else if(reqParams.jobId){
+    qryDelete += " jobId = " + reqParams.jobId;
   }
 
   console.log(qryDelete);
@@ -82,5 +84,31 @@ stageDetail.remove = async (reqParams, result) => {
     console.log("error: ", err);
   }
 };
+
+
+stageDetail.findById = (stageId, result) => {
+  sql.query(`SELECT * FROM stageDetailTable WHERE stageId = ${stageId}`, (err, res) => {
+    console.log("yahan aya");
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found stage: ", res);
+      result(null, res);
+      return;
+    }
+
+    // not found Stage detail with the Id
+    result({ kind: "not_found" }, null);
+  });
+};
+
+
+
+
+
 
 module.exports = stageDetail;
