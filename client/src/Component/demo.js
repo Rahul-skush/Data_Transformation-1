@@ -1,72 +1,62 @@
-import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import Box from "@material-ui/core/Box";
+import Collapse from "@material-ui/core/Collapse";
+import IconButton from "@material-ui/core/IconButton";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
-import New from './New'
-import axios from 'axios'
+import Stages from "./Stages";
+import axios from "axios";
 
-
-
-
+const useRowStyles = makeStyles({
+  head: {
+    // backgroundColor:"#555555"
+    backgroundColor: "#607d8b",
+  },
+});
 
 export default function CollapsibleTable() {
- 
-  const [jobs, setJobs] = useState([])
-    const [ fetchingUser, setFetchingUser ] = useState(true);
+  const [jobs, setJobs] = useState([]);
 
-    useEffect(()=>{
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/jobs")
+      .then((res) => {
+        setJobs(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-       //
-            axios.get('http://localhost:3000/jobs')
-            .then(res =>{
-                // console.log("cheching for req")
-                // console.log(res)
-                setJobs(res.data)
-                
-        
-            })
-            .catch(err => {console.log(err)})
+  const classes = useRowStyles();
 
-       
-        //setFetchingUser(false);
-    
-    },[])
-
-
-
-
-
-  return (    
+  return (
     <TableContainer component={Paper}>
+     
       <Table aria-label="collapsible table">
         <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Data Transformation</TableCell>
-            
-        
+          <TableRow className={classes.head}>
+            <TableCell align="center">
+              <Typography variant="h5">Data Transformation</Typography>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {jobs.map((row) => (
-            <New key={row.Id} row={row} />
+            <Stages key={row.Id} row={row} />
           ))}
-         
-
         </TableBody>
       </Table>
     </TableContainer>
