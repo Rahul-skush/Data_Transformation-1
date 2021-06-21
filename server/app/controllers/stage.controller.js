@@ -5,7 +5,9 @@ const Stage = require("../models/stage.model.js");
 exports.createAllStages = async (req, res, next) => {
   const stages = req.body;
   //console.log(stages)
+
   req.jobId = 35;
+
   const findStage = [];
   const stageNames = [];
   for (name in stages) {
@@ -16,7 +18,9 @@ exports.createAllStages = async (req, res, next) => {
   for (stageName in findStage) {
     var stageEntry = {
       stageName: findStage[stageName],
+
       jobId: req.jobId,
+
     };
     // req.body.findStage[stageName].stageId = 303;
     await Stage.create(stageEntry, (err, data) => {

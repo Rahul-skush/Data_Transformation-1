@@ -28,7 +28,9 @@ exports.createStage = async (req, res) => {
       for (var j = 0; j < findStage[i].length; j++) {
         //console.log(stages[findStage[i]][j])
         k = res.locals.stages[i].Id;
+
         await insertFunction(stages[findStage[i]][j], j, k, req.jobId);
+
       }
       // k++;
     }
