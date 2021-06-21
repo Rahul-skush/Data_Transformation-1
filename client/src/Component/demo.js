@@ -16,7 +16,6 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
 import Stages from "./Stages";
-import Modal from "./Modal";
 import axios from "axios";
 
 const useRowStyles = makeStyles({
@@ -43,13 +42,6 @@ export default function CollapsibleTable() {
   const classes = useRowStyles();
 
   return (
-    <> 
-    <>
-     <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-    </button>
-    <Modal/>
-    </>
     <TableContainer component={Paper}>
      
       <Table aria-label="collapsible table">
@@ -67,6 +59,5 @@ export default function CollapsibleTable() {
         </TableBody>
       </Table>
     </TableContainer>
-    </>
   );
 }
