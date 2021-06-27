@@ -1,3 +1,4 @@
+
 const { json } = require("body-parser");
 const sql = require("./db.js");
 const tableConfig = require("../config/table.config.js");
@@ -31,17 +32,19 @@ stageDetail.getAll = (req, result) => {
   });
 };
 
-stageDetail.updateById = async (reqParams, reqBody, result) => {
-  let qry =
-    `UPDATE ${tableConfig.STAGE_DETAIL_TABLE} SET ?` +
-    reqBody +
-    " WHERE stageDetailId = " +
-    reqParams.stageDetailId +
-    " AND stageId = " +
-    reqParams.stageId +
-    " AND jobId = " +
-    reqParams.jobId;
-  console.log(qry);
+stageDetail.update = async (req, result) => {
+  sql.query(
+    `UPDATE ${tableConfig.STAGE_DETAIL_TABLE} SET property = ?, property_value = ? WHERE ID = ?`,
+    [req.property, req.property_value, req.ID], (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      } else {
+        console.log("success");
+        result(null, res);
+      }
+    });
   return;
 };
 
@@ -112,3 +115,4 @@ stageDetail.findById = (stageId, result) => {
 
 
 module.exports = stageDetail;
+

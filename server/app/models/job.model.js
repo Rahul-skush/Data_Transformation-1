@@ -1,3 +1,4 @@
+
 const sql = require("./db.js");
 const tableConfig = require("../config/table.config.js");
 
@@ -15,7 +16,7 @@ Job.create = (newJob, result) => {
       result(err, null);
       return;
     }
-console.log(res.insertId)
+
     console.log("created job: ", { Id: res.insertId, ...newJob });
     result(null, { Id: res.insertId, ...newJob });
   });
@@ -58,8 +59,8 @@ Job.getAll = (result) => {
 
 Job.updateById = (Id, job, result) => {
   sql.query(
-    `UPDATE ${tableConfig.JOBS} SET name = ? , description = ? WHERE Id = ?`,
-    [job.name,job.description, Id],
+    `UPDATE ${tableConfig.JOBS} SET name = ?, description = ?, updatedOnDate = ?, updatedByUser = ? WHERE Id = ?`,
+    [job.name, job.description, job.updatedOnDate, job.updatedByUser, Id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -112,3 +113,4 @@ Job.removeAll = (result) => {
 };
 
 module.exports = Job;
+

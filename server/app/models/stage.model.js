@@ -1,3 +1,4 @@
+
 const sql = require("./db.js");
 const tableConfig = require("../config/table.config.js");
 
@@ -59,10 +60,10 @@ Stage.getAll = (result) => {
   });
 };
 
-Stage.updateById = (stageId, stage, result) => {
+Stage.updateById = (stage, result) => {
   sql.query(
-    `UPDATE ${tableConfig.STAGES} SET stageName = ? WHERE Id = ?`,
-    [stage.stageName, stageId],
+    `UPDATE ${tableConfig.STAGES} SET stageName = ? WHERE stageId = ?`,
+    [stage.stageName, stage.stageId],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -76,15 +77,15 @@ Stage.updateById = (stageId, stage, result) => {
         return;
       }
 
-      console.log("updated stage: ", { Id: stageId, ...stage });
-      result(null, { Id: stageId, ...stage });
+      console.log("updated stage: ", { ...stage });
+      result(null, { ...stage });
     }
   );
 };
 
 Stage.remove = (stageId, result) => {
   sql.query(
-    `DELETE FROM ${tableConfig.STAGES} WHERE Id = ?`,
+    `DELETE FROM ${tableConfig.STAGES} WHERE stageId = ?`,
     stageId,
     (err, res) => {
       if (err) {
@@ -152,3 +153,4 @@ Stage.removeAllStages = (result) => {
 };
 
 module.exports = Stage;
+
