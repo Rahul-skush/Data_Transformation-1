@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 //import Demo from './prev_working_ui/demo';
 import reportWebVitals from './reportWebVitals';
 
-import Stepper from './Component/JobandDataEntry/stepper'
+import Stepper from  './Components/JobandDataEntry/stepper'
 
 
 
