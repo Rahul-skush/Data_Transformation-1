@@ -59,10 +59,10 @@ Stage.getAll = (result) => {
   });
 };
 
-Stage.updateById = (stageId, stage, result) => {
+Stage.updateById = (stage, result) => {
   sql.query(
     `UPDATE ${tableConfig.STAGES} SET stageName = ? WHERE stageId = ?`,
-    [stage.stageName, stageId],
+    [stage.stageName, stage.stageId],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -76,8 +76,8 @@ Stage.updateById = (stageId, stage, result) => {
         return;
       }
 
-      console.log("updated stage: ", { Id: stageId, ...stage });
-      result(null, { Id: stageId, ...stage });
+      console.log("updated stage: ", { ...stage });
+      result(null, { ...stage });
     }
   );
 };

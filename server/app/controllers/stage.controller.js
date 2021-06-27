@@ -5,9 +5,7 @@ const Stage = require("../models/stage.model.js");
 exports.createAllStages = async (req, res, next) => {
   const stages = req.body;
   //console.log(stages)
-
   req.jobId = 35;
-
   const findStage = [];
   const stageNames = [];
   for (name in stages) {
@@ -18,9 +16,7 @@ exports.createAllStages = async (req, res, next) => {
   for (stageName in findStage) {
     var stageEntry = {
       stageName: findStage[stageName],
-
       jobId: req.jobId,
-
     };
     // req.body.findStage[stageName].stageId = 303;
     await Stage.create(stageEntry, (err, data) => {
@@ -102,15 +98,15 @@ exports.update = (req, res) => {
 
   console.log(req.body);
 
-  Stage.updateById(req.params.stageId, req.body, (err, data) => {
+  Stage.updateById(req.body, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not foundStage with id ${req.params.stageId}.`,
+          message: `Not foundStage with id ${req.body.stageId}.`,
         });
       } else {
         res.status(500).send({
-          message: "Error updating stage with id " + req.params.stageId,
+          message: "Error updating stage with id " + req.body.stageId,
         });
       }
     } else res.send(data);
