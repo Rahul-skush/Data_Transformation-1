@@ -1,3 +1,4 @@
+
 const sql = require("./db.js");
 const tableConfig = require("../config/table.config.js");
 
@@ -152,3 +153,4 @@ Stage.removeAllStages = (result) => {
 };
 
 module.exports = Stage;
+

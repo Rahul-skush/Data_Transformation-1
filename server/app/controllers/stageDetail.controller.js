@@ -1,3 +1,4 @@
+
 const stageDetail = require("../models/stageDetail.model.js");
 const stagesController = require("./stage.controller");
 
@@ -5,15 +6,15 @@ const stagesController = require("./stage.controller");
 
 exports.createStage = async (req, res) => {
   // Validate request 
-
+//console.log("*** aaaaaaaaaaaaaaaaaaaa")
   if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!",
     });
   }
 
-  const stages = req.body;
-
+  const stages = req.body.data;
+console.log(stages)
   // find stage name 
   const findStage = [];
   for (name in stages) {
@@ -22,13 +23,15 @@ exports.createStage = async (req, res) => {
 
   // create stageDetail
   try {
-    var k = 101;
-    console.log(`checking ${k}`);
+   // var k = 101;
+   var jId=req.body.jobId
+    
     for (var i = 0; i < findStage.length; i++) {
       for (var j = 0; j < findStage[i].length; j++) {
         //console.log(stages[findStage[i]][j])
         k = res.locals.stages[i].Id;
-        await insertFunction(stages[findStage[i]][j], j, k, req.jobId);
+        console.log(`checking ${k}`);
+        await insertFunction(stages[findStage[i]][j], j, k,jId);
       }
       // k++;
     }
@@ -77,20 +80,13 @@ exports.updateStageDetail = async (req, res, next) => {
   }
 
   try {
-    for(var i=0;i<req.body.length;i++){
-      await stageDetail.update(req.body[i],(err, data)=>{
-        if(err){
-          console.log("error: ", err);
-        }else
-        console.log("this is set", data);
-      });
-    }
-    // const insertUpdates = await insertFunction(
-    //   req.body,
-    //   req.params.stageDetailId,
-    //   req.params.stageId,
-    //   req.params.jobId
-    // );
+    const deleteStageDetail = await deleteFunction(req.params, res);
+    const insertUpdates = await insertFunction(
+      req.body,
+      req.params.stageDetailId,
+      req.params.stageId,
+      req.params.jobId
+    );
   } catch (err) {
     console.log(err);
   }
@@ -100,7 +96,7 @@ exports.updateStageDetail = async (req, res, next) => {
 //delete stageDetails
 exports.delete = (req, res) => {
   console.log("jjjjjjjjj");
-  deleteFunction(req.params, res);
+   deleteFunction(req.params, res);
 };
 //END of delete stageDetails
 
@@ -174,6 +170,5 @@ const deleteFunction = async (reqParams, res) => {
     console.log(err);
   }
 };
-
 
 

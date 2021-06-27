@@ -1,3 +1,4 @@
+
 const Job = require("../models/job.model.js");
 
 
@@ -17,7 +18,7 @@ exports.createJob = async(req, res, next) => {
 
 
 // Create and Save a new Customer
-exports.create = async (req, res, next) => {
+exports.create =  (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
@@ -133,3 +134,4 @@ exports.deleteAll = (req, res) => {
     else res.send({ message: `All Jobs were deleted successfully!` });
   });
 };
+

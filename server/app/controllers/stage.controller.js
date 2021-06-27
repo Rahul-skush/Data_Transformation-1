@@ -1,11 +1,15 @@
+
 const Stage = require("../models/stage.model.js");
+
 
 // create all stages
 
 exports.createAllStages = async (req, res, next) => {
-  const stages = req.body;
+  console.log(req.body.data)
+  // const stages = req.body.fileData;
   //console.log(stages)
-  req.jobId = 35;
+  const jId = req.body.jobId
+const stages=req.body.data
   const findStage = [];
   const stageNames = [];
   for (name in stages) {
@@ -16,7 +20,8 @@ exports.createAllStages = async (req, res, next) => {
   for (stageName in findStage) {
     var stageEntry = {
       stageName: findStage[stageName],
-      jobId: req.jobId,
+      jobId: jId,
+      // jobId: req.body.jobId,
     };
     // req.body.findStage[stageName].stageId = 303;
     await Stage.create(stageEntry, (err, data) => {
@@ -98,22 +103,22 @@ exports.update = (req, res) => {
 
   console.log(req.body);
 
-  Stage.updateById(req.body, (err, data) => {
+  Stage.updateById(req.params.stageId, req.body, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not foundStage with id ${req.body.stageId}.`,
+          message: `Not foundStage with id ${req.params.stageId}.`,
         });
       } else {
         res.status(500).send({
-          message: "Error updating stage with id " + req.body.stageId,
+          message: "Error updating stage with id " + req.params.stageId,
         });
       }
     } else res.send(data);
   });
 };
 
-// Delete a stage with the specified stageId in the request
+// Delete a stage and stageDetails with the specified stageId in the request
 exports.delete = async (req, res, next) => {
   Stage.remove(req.params.stageId, (err, data) => {
     if (err) {
@@ -133,6 +138,10 @@ exports.delete = async (req, res, next) => {
     }
   });
 };
+
+
+
+
 
 // Delete allStages from the database.
 exports.deleteAll = (req, res, next) => {
@@ -160,6 +169,4 @@ exports.deleteAllStages = (req, res) => {
     else res.send({ message: `All Stages were deleted successfully!` });
   });
 };
-
-
 

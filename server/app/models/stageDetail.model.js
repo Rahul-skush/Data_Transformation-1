@@ -1,3 +1,4 @@
+
 const { json } = require("body-parser");
 const sql = require("./db.js");
 const tableConfig = require("../config/table.config.js");
@@ -114,3 +115,4 @@ stageDetail.findById = (stageId, result) => {
 
 
 module.exports = stageDetail;
+

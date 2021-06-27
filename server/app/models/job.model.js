@@ -1,3 +1,4 @@
+
 const sql = require("./db.js");
 const tableConfig = require("../config/table.config.js");
 
@@ -5,7 +6,7 @@ const tableConfig = require("../config/table.config.js");
 const Job = function (job) {
   this.name = job.name;
   this.description = job.description;
-  this.Id = job.Id;
+  //this.Id = job.Id;
 };
 
 Job.create = (newJob, result) => {
@@ -112,3 +113,4 @@ Job.removeAll = (result) => {
 };
 
 module.exports = Job;
+

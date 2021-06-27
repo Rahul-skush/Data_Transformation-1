@@ -1,12 +1,17 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Demo from './Component1/demo';
+//import Demo from './prev_working_ui/demo';
 import reportWebVitals from './reportWebVitals';
+
+import Stepper from  './Components/JobandDataEntry/stepper'
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <Demo />
+    <Stepper/>
   </React.StrictMode>,
   document.getElementById('root')
 );
@@ -15,3 +20,4 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
