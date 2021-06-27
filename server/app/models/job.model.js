@@ -58,8 +58,8 @@ Job.getAll = (result) => {
 
 Job.updateById = (Id, job, result) => {
   sql.query(
-    `UPDATE ${tableConfig.JOBS} SET name = ? WHERE Id = ?`,
-    [job.name, Id],
+    `UPDATE ${tableConfig.JOBS} SET name = ?, description = ?, updatedOnDate = ?, updatedByUser = ? WHERE Id = ?`,
+    [job.name, job.description, job.updatedOnDate, job.updatedByUser, Id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);

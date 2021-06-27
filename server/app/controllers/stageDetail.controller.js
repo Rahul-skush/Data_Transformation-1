@@ -28,9 +28,7 @@ exports.createStage = async (req, res) => {
       for (var j = 0; j < findStage[i].length; j++) {
         //console.log(stages[findStage[i]][j])
         k = res.locals.stages[i].Id;
-
         await insertFunction(stages[findStage[i]][j], j, k, req.jobId);
-
       }
       // k++;
     }
@@ -79,13 +77,20 @@ exports.updateStageDetail = async (req, res, next) => {
   }
 
   try {
-    const deleteStageDetail = await deleteFunction(req.params, res);
-    const insertUpdates = await insertFunction(
-      req.body,
-      req.params.stageDetailId,
-      req.params.stageId,
-      req.params.jobId
-    );
+    for(var i=0;i<req.body.length;i++){
+      await stageDetail.update(req.body[i],(err, data)=>{
+        if(err){
+          console.log("error: ", err);
+        }else
+        console.log("this is set", data);
+      });
+    }
+    // const insertUpdates = await insertFunction(
+    //   req.body,
+    //   req.params.stageDetailId,
+    //   req.params.stageId,
+    //   req.params.jobId
+    // );
   } catch (err) {
     console.log(err);
   }
