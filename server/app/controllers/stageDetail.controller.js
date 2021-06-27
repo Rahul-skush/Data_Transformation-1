@@ -5,15 +5,15 @@ const stagesController = require("./stage.controller");
 
 exports.createStage = async (req, res) => {
   // Validate request 
-
+//console.log("*** aaaaaaaaaaaaaaaaaaaa")
   if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!",
     });
   }
 
-  const stages = req.body;
-
+  const stages = req.body.data;
+console.log(stages)
   // find stage name 
   const findStage = [];
   for (name in stages) {
@@ -22,13 +22,15 @@ exports.createStage = async (req, res) => {
 
   // create stageDetail
   try {
-    var k = 101;
-    console.log(`checking ${k}`);
+   // var k = 101;
+   var jId=req.body.jobId
+    
     for (var i = 0; i < findStage.length; i++) {
       for (var j = 0; j < findStage[i].length; j++) {
         //console.log(stages[findStage[i]][j])
         k = res.locals.stages[i].Id;
-        await insertFunction(stages[findStage[i]][j], j, k, 17);
+        console.log(`checking ${k}`);
+        await insertFunction(stages[findStage[i]][j], j, k,jId);
       }
       // k++;
     }

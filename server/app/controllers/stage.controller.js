@@ -1,11 +1,14 @@
 const Stage = require("../models/stage.model.js");
 
+
 // create all stages
 
 exports.createAllStages = async (req, res, next) => {
-  const stages = req.body;
+  console.log(req.body.data)
+  // const stages = req.body.fileData;
   //console.log(stages)
-
+  const jId = req.body.jobId
+const stages=req.body.data
   const findStage = [];
   const stageNames = [];
   for (name in stages) {
@@ -16,7 +19,8 @@ exports.createAllStages = async (req, res, next) => {
   for (stageName in findStage) {
     var stageEntry = {
       stageName: findStage[stageName],
-      jobId: 17,
+      jobId: jId,
+      // jobId: req.body.jobId,
     };
     // req.body.findStage[stageName].stageId = 303;
     await Stage.create(stageEntry, (err, data) => {
@@ -134,27 +138,7 @@ exports.delete = async (req, res, next) => {
   });
 };
 
-// //Delete a particular stage (Just for testing)
-// exports.deleteStage = async (req, res, next) => {
-//   Stage.remove(req.params.stageId, (err, data) => {
-//     if (err) {
-//       if (err.kind === "not_found") {
-//         res.status(404).send({
-//           message: `Not foundStage with id ${req.params.stageId}.`,
-//         });
-//       } else {
-//         res.status(500).send({
-//           message: "Could not deleteStage with id " + req.params.stageId,
-//         });
-//       }
-//     }
-//     //delete karenge
-//     else {
-    
-//       res.send({ message: `stage was deleted successfully!` });
-//     }
-//   });
-// };
+
 
 
 

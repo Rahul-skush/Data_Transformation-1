@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Demo from './Component/demo';
+//import Demo from './prev_working_ui/demo';
 import reportWebVitals from './reportWebVitals';
+
+import Stepper from './Component/JobandDataEntry/stepper'
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <Demo />
+    <Stepper/>
   </React.StrictMode>,
   document.getElementById('root')
 );

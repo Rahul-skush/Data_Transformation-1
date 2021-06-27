@@ -17,7 +17,7 @@ exports.createJob = async(req, res, next) => {
 
 
 // Create and Save a new Customer
-exports.create = async (req, res, next) => {
+exports.create = (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
@@ -31,7 +31,7 @@ exports.create = async (req, res, next) => {
     description: req.body.description,
     
   });
-
+console.log(job)
   // Save Customer in the database
   Job.create(job, (err, data) => {
     if (err)

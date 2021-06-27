@@ -5,7 +5,7 @@ const tableConfig = require("../config/table.config.js");
 const Job = function (job) {
   this.name = job.name;
   this.description = job.description;
-  this.Id = job.Id;
+  //this.Id = job.Id;
 };
 
 Job.create = (newJob, result) => {
@@ -15,7 +15,7 @@ Job.create = (newJob, result) => {
       result(err, null);
       return;
     }
-
+console.log(res.insertId)
     console.log("created job: ", { Id: res.insertId, ...newJob });
     result(null, { Id: res.insertId, ...newJob });
   });
