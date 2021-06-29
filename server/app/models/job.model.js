@@ -54,10 +54,10 @@ Job.getAll = (result) => {
   });
 };
 
-Job.updateById = (Id, job, result) => {
+Job.updateById = (id, job, result) => {
   sql.query(
     `UPDATE ${tableConfig.JOBS} SET name = ?, description = ?, updatedOnDate = ?, updatedByUser = ? WHERE id = ?`,
-    [job.name, job.description, job.updatedOnDate, job.updatedByUser, Id],
+    [job.name, job.description, job.updatedOnDate, job.updatedByUser, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -71,14 +71,14 @@ Job.updateById = (Id, job, result) => {
         return;
       }
 
-      console.log("updated job: ", { Id: Id, ...job });
-      result(null, { Id: Id, ...job });
+      console.log("updated job: ", { Id: id, ...job });
+      result(null, { Id: id, ...job });
     }
   );
 };
 
-Job.remove = (Id, result) => {
-  sql.query(`DELETE FROM ${tableConfig.JOBS} WHERE id = ?`, Id, (err, res) => {
+Job.remove = (id, result) => {
+  sql.query(`DELETE FROM ${tableConfig.JOBS} WHERE id = ?`, id, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -91,7 +91,7 @@ Job.remove = (Id, result) => {
       return;
     }
 
-    console.log("deleted job with Id: ", Id);
+    console.log("deleted job with Id: ", id);
     result(null, res);
   });
 };
