@@ -6,7 +6,6 @@ const tableConfig = require("../config/table.config.js");
 const Job = function (job) {
   this.name = job.name;
   this.description = job.description;
-  //this.Id = job.Id;
 };
 
 Job.create = (newJob, result) => {
@@ -24,7 +23,7 @@ Job.create = (newJob, result) => {
 
 Job.findById = (jobId, result) => {
   sql.query(
-    `SELECT * FROM ${tableConfig.JOBS} WHERE Id = ${jobId}`,
+    `SELECT * FROM ${tableConfig.JOBS} WHERE id = ${jobId}`,
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -37,8 +36,6 @@ Job.findById = (jobId, result) => {
         result(null, res[0]);
         return;
       }
-
-      // not found Job with the Id
       result({ kind: "not_found" }, null);
     }
   );
@@ -59,7 +56,7 @@ Job.getAll = (result) => {
 
 Job.updateById = (Id, job, result) => {
   sql.query(
-    `UPDATE ${tableConfig.JOBS} SET name = ?, description = ?, updatedOnDate = ?, updatedByUser = ? WHERE Id = ?`,
+    `UPDATE ${tableConfig.JOBS} SET name = ?, description = ?, updatedOnDate = ?, updatedByUser = ? WHERE id = ?`,
     [job.name, job.description, job.updatedOnDate, job.updatedByUser, Id],
     (err, res) => {
       if (err) {
@@ -81,7 +78,7 @@ Job.updateById = (Id, job, result) => {
 };
 
 Job.remove = (Id, result) => {
-  sql.query(`DELETE FROM ${tableConfig.JOBS} WHERE Id = ?`, Id, (err, res) => {
+  sql.query(`DELETE FROM ${tableConfig.JOBS} WHERE id = ?`, Id, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);

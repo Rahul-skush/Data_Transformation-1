@@ -34,8 +34,8 @@ stageDetail.getAll = (req, result) => {
 
 stageDetail.update = async (req, result) => {
   sql.query(
-    `UPDATE ${tableConfig.STAGE_DETAIL_TABLE} SET property = ?, property_value = ? WHERE ID = ?`,
-    [req.property, req.property_value, req.ID], (err, res) => {
+    `UPDATE ${tableConfig.STAGE_DETAIL_TABLE} SET property = ?, property_value = ? WHERE id = ?`,
+    [req.property, req.property_value, req.id], (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);

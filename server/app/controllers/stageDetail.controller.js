@@ -6,7 +6,6 @@ const stagesController = require("./stage.controller");
 
 exports.createStage = async (req, res) => {
   // Validate request 
-//console.log("*** aaaaaaaaaaaaaaaaaaaa")
   if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!",
@@ -14,7 +13,7 @@ exports.createStage = async (req, res) => {
   }
 
   const stages = req.body.data;
-console.log(stages)
+  console.log(stages)
   // find stage name 
   const findStage = [];
   for (name in stages) {
@@ -23,17 +22,14 @@ console.log(stages)
 
   // create stageDetail
   try {
-   // var k = 101;
    var jId=req.body.jobId
-    
+    var k;
     for (var i = 0; i < findStage.length; i++) {
       for (var j = 0; j < findStage[i].length; j++) {
-        //console.log(stages[findStage[i]][j])
         k = res.locals.stages[i].Id;
-        console.log(`checking ${k}`);
+       
         await insertFunction(stages[findStage[i]][j], j, k,jId);
       }
-      // k++;
     }
     res.status(200).send({
       message: "entery successfully",
@@ -47,7 +43,6 @@ console.log(stages)
   }
 };
 
-// **********************************
 
 //get all stageDetails
 exports.getAll = async (req, res, next) => {
@@ -64,7 +59,6 @@ exports.getAll = async (req, res, next) => {
     console.log(err);
   }
 };
-//END of get all stageDetails
 
 //update stageDetails
 exports.updateStageDetail = async (req, res, next) => {
@@ -78,28 +72,25 @@ exports.updateStageDetail = async (req, res, next) => {
       message: "stageDetailId  can not be empty!",
     });
   }
-
   try {
-    const deleteStageDetail = await deleteFunction(req.params, res);
-    const insertUpdates = await insertFunction(
-      req.body,
-      req.params.stageDetailId,
-      req.params.stageId,
-      req.params.jobId
-    );
+    for(var i=0;i<req.body.length;i++) {
+      await stageDetail.update(req.body[i], (err, data)=>{
+        if(err){
+          console.log(err);
+        }else console.log(data);
+      });
+      res.send(req.body);
+    }
   } catch (err) {
     console.log(err);
   }
 };
-//END of update stageDetails
+
 
 //delete stageDetails
 exports.delete = (req, res) => {
-  console.log("jjjjjjjjj");
    deleteFunction(req.params, res);
 };
-//END of delete stageDetails
-
 
 
 //Getting all the stage details of a stage
@@ -118,13 +109,6 @@ exports.getDetailsOfStage = (req, res) => {
     } else res.send(data);
   });
 };
-//END of getting stage details
-
-
-
-
-
-
 
 
 // helper functions
@@ -139,18 +123,16 @@ const insertFunction = async (data, stageDetailId, stageId, jobId) => {
       stageRecordNew.stageDetailId = stageDetailId;
       stageRecordNew.property = column;
       stageRecordNew.property_value = data[column];
-      //console.log("\nrecord == ", stageRecordNew);
       const createStageRecord = await stageDetail.createStageRecord(
         stageRecordNew
       );
-      // Promise.all(createStageRecord);
     }
   } catch (err) {
     console.log(err);
   }
 };
 
-// delete stageDetail --------------------------------
+// delete stageDetail 
 const deleteFunction = async (reqParams, res) => {
   try {
     await stageDetail.remove(reqParams, (err, data) => {

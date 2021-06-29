@@ -10,16 +10,16 @@ module.exports = app => {
     // Retrieve all Jobs
     app.get("/jobs", jobs.findAll);
   
-    // Retrieve a single Job with jobId
+    // Retrieve a single Job by jobId
     app.get("/jobs/:jobId", jobs.findOne);
   
-    // Update a Job with jobId
+    // Update a Job by jobId
     app.put("/jobs/:jobId", jobs.update);
   
-    // Delete a Job with jobId
+    // Delete a Job by jobId followed by deletion of corresponding stages and stagsDetails
     app.delete("/jobs/:jobId", jobs.delete, stages.deleteAll, stageDetail.delete);
   
-    // Create a new Job
+    // Delete all Jobs
     app.delete("/jobs/remove", jobs.deleteAll);
 
 

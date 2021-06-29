@@ -1,15 +1,10 @@
-
 const Stage = require("../models/stage.model.js");
 
-
 // create all stages
-
 exports.createAllStages = async (req, res, next) => {
-  console.log(req.body.data)
-  // const stages = req.body.fileData;
-  //console.log(stages)
-  const jId = req.body.jobId
-const stages=req.body.data
+  console.log(req.body.data);
+  const jId = req.body.jobId;
+  const stages = req.body.data;
   const findStage = [];
   const stageNames = [];
   for (name in stages) {
@@ -19,11 +14,9 @@ const stages=req.body.data
   if (findStage.length == 0) return;
   for (stageName in findStage) {
     var stageEntry = {
-      stageName: findStage[stageName],
+      name: findStage[stageName],
       jobId: jId,
-      // jobId: req.body.jobId,
     };
-    // req.body.findStage[stageName].stageId = 303;
     await Stage.create(stageEntry, (err, data) => {
       if (err)
         res.status(500).send({
@@ -38,7 +31,7 @@ const stages=req.body.data
   }
 };
 
-// Create and Save a new Customer
+// Create and Save a new stage
 exports.create = (req, res) => {
   // Validate request
 
@@ -48,13 +41,13 @@ exports.create = (req, res) => {
     });
   }
 
-  // Create a Customer
+  // Create a stage
   const stage = new Stage({
-    stageName: req.body.stageName,
+    name: req.body.name,
     jobId: req.body.jobId,
   });
   console.log(stage);
-  // Save Customer in the database
+  // Save stage in the database
   Stage.create(stage, (err, data) => {
     if (err)
       res.status(500).send({
@@ -64,7 +57,7 @@ exports.create = (req, res) => {
   });
 };
 
-// Retrieve all Customers from the database.
+// Retrieve all stages from the database.
 exports.findAll = (req, res) => {
   Stage.getAll((err, data) => {
     if (err)
@@ -75,7 +68,7 @@ exports.findAll = (req, res) => {
   });
 };
 
-// Find a single Stage with a customerId
+// Find a single Stage with a id
 exports.findOne = (req, res) => {
   Stage.findById(req.params.jobId, (err, data) => {
     if (err) {
@@ -92,7 +85,7 @@ exports.findOne = (req, res) => {
   });
 };
 
-// Update a stage identified by the stageId in the request
+// Update a stage identified by the id in the request
 exports.update = (req, res) => {
   // Validate Request
   if (!req.body) {
@@ -101,24 +94,24 @@ exports.update = (req, res) => {
     });
   }
 
-  console.log(req.body);
+  console.log( req.body);
 
-  Stage.updateById(req.params.stageId, req.body, (err, data) => {
+  Stage.updateById(req.body, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not foundStage with id ${req.params.stageId}.`,
+          message: `Not foundStage with id ${req.body.id}. ${req}`,
         });
       } else {
         res.status(500).send({
-          message: "Error updating stage with id " + req.params.stageId,
+          message: "Error updating stage with id " + req.body.id,
         });
       }
     } else res.send(data);
   });
 };
 
-// Delete a stage and stageDetails with the specified stageId in the request
+// Delete a stage and stageDetails with the specified id in the request
 exports.delete = async (req, res, next) => {
   Stage.remove(req.params.stageId, (err, data) => {
     if (err) {
@@ -131,17 +124,11 @@ exports.delete = async (req, res, next) => {
           message: "Could not deleteStage with id " + req.params.stageId,
         });
       }
-    }
-    //delete karenge
-    else {
+    } else {
       next();
     }
   });
 };
-
-
-
-
 
 // Delete allStages from the database.
 exports.deleteAll = (req, res, next) => {
@@ -153,7 +140,7 @@ exports.deleteAll = (req, res, next) => {
       });
     else {
       next();
-     // res.send({ message: `All Stages were deleted successfully!` });
+      // res.send({ message: `All Stages were deleted successfully!` });
     }
   });
 };
@@ -169,4 +156,3 @@ exports.deleteAllStages = (req, res) => {
     else res.send({ message: `All Stages were deleted successfully!` });
   });
 };
-

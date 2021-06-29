@@ -1,21 +1,20 @@
 module.exports = (app) => {
   const stageDetail = require("../controllers/stageDetail.controller.js");
-  const stagesController = require("../controllers/stage.controller.js");
-  const jobsController = require("../controllers/job.controller.js");
+  const stages = require("../controllers/stage.controller.js");
 
-  // Create a new stageDetails in job
-  app.post( "/stageDetail", stagesController.createAllStages, stageDetail.createStage );
+  // Create stageDetails and stages sorresponding to a job from json data
+  app.post( "/stageDetail", stages.createAllStages, stageDetail.createStage );
 
   // get all stageDetails
   app.get("/stageDetail", stageDetail.getAll);
 
-  // update Stage Detail
+  // update by jobId && stageId && stageDetailId
   app.put( "/stageDetail/:jobId/:stageId/:stageDetailId", stageDetail.updateStageDetail );
-  // delete
+  
+  // delete by jobId && stageId && stageDetailId
   app.delete("/stageDetail/:jobId/:stageId/:stageDetailId", stageDetail.delete);
 
-//getting all the stageDetails of a particular stage
-  app.get("/stageDetail/:stageId",stageDetail.getDetailsOfStage)
-
+  // getting all the stageDetails of a particular stage
+  app.get("/stageDetail/:stageId",stageDetail.getDetailsOfStage) 
 
 };

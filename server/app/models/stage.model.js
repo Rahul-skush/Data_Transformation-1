@@ -2,11 +2,10 @@
 const sql = require("./db.js");
 const tableConfig = require("../config/table.config.js");
 
-// constructor (for testing)
+// constructor 
 const Stage = function (stage) {
-  this.stageName = stage.stageName;
+  this.name = stage.name;
   this.jobId = stage.jobId;
-  // this.stageId = stage.stageId;
 };
 
 Stage.create = (newStage, result) => {
@@ -18,7 +17,6 @@ Stage.create = (newStage, result) => {
     }
 
     console.log("created stage: ", { Id: res.insertId, ...newStage });
-    //console.log(res.insertId)
 
     result(null, { Id: res.insertId, ...newStage });
   });
@@ -62,8 +60,8 @@ Stage.getAll = (result) => {
 
 Stage.updateById = (stage, result) => {
   sql.query(
-    `UPDATE ${tableConfig.STAGES} SET stageName = ? WHERE stageId = ?`,
-    [stage.stageName, stage.stageId],
+    `UPDATE ${tableConfig.STAGES} SET name = ? WHERE id = ?`,
+    [stage.name, stage.id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -85,7 +83,7 @@ Stage.updateById = (stage, result) => {
 
 Stage.remove = (stageId, result) => {
   sql.query(
-    `DELETE FROM ${tableConfig.STAGES} WHERE stageId = ?`,
+    `DELETE FROM ${tableConfig.STAGES} WHERE id = ?`,
     stageId,
     (err, res) => {
       if (err) {
@@ -134,22 +132,6 @@ Stage.removeAllStages = (result) => {
     console.log(`deleted ${res.affectedRows} stages`);
     result(null, res);
   });
-
-  Stage.createStage = (newStage, result) => {
-    sql.query("INSERT INTO stages SET ?", newStage, (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-
-      console.log("created stage: ", { Id: res.insertId, ...newStage });
-      console.log(res.insertId);
-      newStage.stageId = res.insertId;
-
-      result(null, { Id: res.insertId, ...newStage });
-    });
-  };
 };
 
 module.exports = Stage;

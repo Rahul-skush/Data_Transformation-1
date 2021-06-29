@@ -2,22 +2,7 @@
 const Job = require("../models/job.model.js");
 
 
-// create new job from request
-exports.createJob = async(req, res, next) => {
-    // Validate request
-  if (!req.body) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-  }
-
-  if(req.jobName) next();
-}
-
-
-
-
-// Create and Save a new Customer
+// Create and Save a new job
 exports.create =  (req, res) => {
   // Validate request
   if (!req.body) {
@@ -26,14 +11,14 @@ exports.create =  (req, res) => {
     });
   }
 
-  // Create a Customer
+  // Create a job
   const job = new Job({
     name: req.body.name,
     description: req.body.description,
     
   });
 
-  // Save Customer in the database
+  // Save job in the database
   Job.create(job, (err, data) => {
     if (err)
       res.status(500).send({
@@ -44,7 +29,7 @@ exports.create =  (req, res) => {
   });
 };
 
-// Retrieve all Customers from the database.
+// Retrieve all jobs from the database.
 exports.findAll = (req, res) => {
   Job.getAll((err, data) => {
     if (err)
@@ -56,7 +41,7 @@ exports.findAll = (req, res) => {
   });
 };
 
-// Find a single Job with a customerId
+// Find a single Job with a jobId
 exports.findOne = (req, res) => {
   Job.findById(req.params.jobId, (err, data) => {
     if (err) {
@@ -118,7 +103,6 @@ exports.delete = (req, res, next) => {
       }
     } else {
       next();
-      //res.send({ message: `job was deleted successfully!` });
     }
   });
 };

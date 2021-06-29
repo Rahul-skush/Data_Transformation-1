@@ -2,23 +2,25 @@
 module.exports = app => {
   const stages = require("../controllers/stage.controller.js");
   const stageDetail = require("../controllers/stageDetail.controller.js");
+
   // Create a new Stage
   app.post("/stages", stages.create);
 
   // Retrieve all Stages
   app.get("/stages", stages.findAll);
 
-  // Retrieve a single Stage with stageId
+  // Retrieve Stages by jobId
   app.get("/stages/:jobId", stages.findOne);
 
-  // Update a Stage with stageId
+  // Update a Stage by stageId
   app.put("/stages/", stages.update);
 
-  // Delete a Stage with stageId
+  // Delete a Stage by stageId
   app.delete("/stages/:stageId", stages.delete, stageDetail.delete);
 
-  // Create a new Stage
+  // delete all stages by jobId
   app.delete("/stages/remove/:jobId", stages.deleteAll);
-  //remove all stages
+  
+  // remove all stages from table
   app.delete("/stages/remove/", stages.deleteAllStages);
 };
