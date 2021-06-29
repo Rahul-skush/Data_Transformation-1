@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
@@ -12,13 +12,16 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import DeleteOutlineRoundedIcon from "@material-ui/icons/DeleteOutlineRounded";
+import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
+import Tooltip from "@material-ui/core/Tooltip";
+import TextField from "@material-ui/core/TextField";
 import axios from "axios";
-
 import StageDetailList from "./StageDetailList";
-
 
 const useRowStyles = makeStyles({
   root: {
@@ -36,7 +39,10 @@ const useRowStyles = makeStyles({
   },
 });
 
+const GameContext = createContext();
+
 const Stages = (props) => {
+  console.log("\n\n\n\n");
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
@@ -48,22 +54,20 @@ const Stages = (props) => {
   const [fetchingUser, setFetchingUser] = useState(true);
   const [noError, setNoError] = useState(false);
   const [jobs, setJobs] = useState(row);
-  const [nameDisplay, setNameDisplay] = useState({
-    name: row.name,
-    description: row.description,
-  });
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/stages/${row.Id}`,
+          `http://localhost:3000/stages/${row.id}`,
           {}
         );
 
         if (fetchingUser) {
           const data = await response.json();
+          console.log("dscdcs");
           setUser(data);
+          
         }
 
         setFetchingUser(false);
@@ -75,126 +79,254 @@ const Stages = (props) => {
     fetchUser();
   }, []);
 
-  const updateJob = (row) => {
-    axios.put(`http://localhost:3000/jobs/${row.Id}`, {
-      name: jobs.name,
-      description: jobs.description,
-    });
-    row.name = jobs.name;
-    row.description = jobs.description;
-    // console.log(row)
-    setNameDisplay({ name: jobs.name, description: jobs.description });
-  };
-
   const deleteJob = (id) => {
     console.log("del");
     console.log(id);
-
-    // fetch(`http://localhost:3000/jobs/${id}`, { method: 'DELETE' }).then(()=>{setJobs(null)})
     axios.delete(`http://localhost:3000/jobs/${id}`).then(() => {
       setJobs(null);
+      setLoad(false);
     });
   };
 
-  const handleJobNameChange = (event) => {
-    console.log(event.target.value);
-    const value_name = event.target.value;
-    const name = event.target.name;
-    console.log(value_name, name);
-    setJobs((prevValue) => {
-      if (name === "jobName") {
-        return { name: value_name, description: prevValue.description };
-      } else {
-        return { name: prevValue.name, description: value_name };
-      }
+  const [inEditMode, setInEditMode] = useState({
+    status: false,
+    rowKey: null,
+  });
+  const [saveStatus, setSaveStatus] = useState(false);
+  const [cancelStatus, setCancelStatus] = useState(false);
+  const [load, setLoad] = useState(true);
+
+  const onEdit = (id) => {
+    setInEditMode({
+      status: true,
+      rowKey: id,
     });
   };
+  const [rowData, setRowData] = useState(row);
+
+  const onSave = () => {
+    var date = new Date();
+    var json = JSON.stringify(date);
+    json = JSON.parse(json);
+    rowData.updatedOnDate = json;
+    rowData.updatedByUser = "Rahul singh";
+    if (rowData.name !== row.name || rowData.description !== row.description)
+      updateInventory(rowData);
+    setSaveStatus(true);
+   onCancel(1);
+  };
+
+  const onCancel = (check) => {
+    //reset the inEditMode state value
+    setInEditMode({
+      status: false,
+      rowKey: null,
+    });
+    setCancelStatus(true);
+
+    if (check === 0) {
+      setRowData(row);
+    }
+  };
+
+  const updateInventory = (data) => {
+    console.log(data);
+    axios
+      .put(`http://localhost:3000/jobs/${data.id}`, data)
+      .then((response) => console.log("dasdasdsa", response))
+      .then((json) => {
+        // reset inEditMode
+        // fetch the updated data
+      });
+  };
+  console.log(row.name + "hbjhhh " + user);
 
   return (
     <div>
-      {" "}
-      {jobs ? (
-        <React.Fragment>
-          <Table>
-            <TableRow className={classes.head}>
-              <TableCell>
-                <IconButton
-                  aria-label="expand row"
-                  size="small"
-                  onClick={() => setOpen(!open)}
-                >
-                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </IconButton>
-              </TableCell>
-              <TableCell align="right">
-                <Typography variant="h6">{nameDisplay.name}</Typography>
-              </TableCell>
-
-              <TableCell>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Edit Job Name"
-                    name="jobName"
-                    onChange={handleJobNameChange}
-                  ></input>
-                  <button onClick={() => updateJob(row)}>Update</button>
-                </div>
-              </TableCell>
-
-              <TableCell align="right">
-                <Typography variant="h6">{nameDisplay.description}</Typography>
-              </TableCell>
-
-              <TableCell>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Edit Job Description"
-                    name="jobDescription"
-                    onChange={handleJobNameChange}
-                  ></input>
-                  <button onClick={() => updateJob(row)}>Update</button>
-                </div>
-              </TableCell>
-
-              <TableCell>
-                <button onClick={() => deleteJob(row.Id)}>
-                  {" "}
-                  <DeleteOutlineRoundedIcon />
-                </button>
-              </TableCell>
-              <TableCell />
-            </TableRow>
-
-            <TableRow className={classes.row}>
-              <TableCell
-                style={{ paddingBottom: 0, paddingTop: 0 }}
-                colSpan={6}
+      {jobs? (
+          <React.Fragment>
+          <TableRow className={classes.head}>
+            <TableCell component="th" scope="row" align="left">
+              <IconButton
+                aria-label="expand row"
+                size="small"
+                onClick={() => setOpen(!open)}
               >
-                <Collapse in={open} timeout="auto" unmountOnExit>
-                  <Box margin={1}>
-                    <Typography variant="h6" gutterBottom component="div">
-                      Stages
-                    </Typography>
-                    <Table size="small" aria-label="purchases">
-                      <TableBody>
-                        {user
-                          ? user.map((row) => (
-                              <StageDetailList key={row.Id} row={row} />
-                            ))
-                          : null}
-                      </TableBody>
-                    </Table>
-                  </Box>
-                </Collapse>
-              </TableCell>
-            </TableRow>
-          </Table>
+                {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </IconButton>
+              <Tooltip
+                title={
+                  inEditMode.status && inEditMode.rowKey === row.id
+                    ? "Cancel"
+                    : "Edit"
+                }
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={inEditMode.status}
+                      style={{ marginLeft: 8 }}
+                      onChange={() => {
+                        inEditMode.status && inEditMode.rowKey === row.id
+                          ? onCancel(0)
+                          : onEdit(row.id);
+                      }}
+                      name="checkedA"
+                      color="primary"
+                      label="Cancel"
+                    />
+                  }
+                />
+              </Tooltip>
+
+              {inEditMode.status && inEditMode.rowKey === row.id ? (
+                <>
+                  <Tooltip title="Save">
+                    <FormControlLabel
+                      control={
+                        <SaveOutlinedIcon
+                          onClick={() => onSave()}
+                        ></SaveOutlinedIcon>
+                      }
+                    />
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <FormControlLabel
+                      control={
+                        <DeleteOutlineRoundedIcon
+                          onClick={() => deleteJob(row.id)}
+                        ></DeleteOutlineRoundedIcon>
+                      }
+                    />
+                  </Tooltip>
+                </>
+              ) : null}
+            </TableCell>
+            <TableCell align="center">
+              <Typography>
+                {inEditMode.status && inEditMode.rowKey === row.id ? (
+                  <TextField
+                    required
+                    id="standard-required"
+                    label="Required"
+                    value={rowData.name}
+                    onChange={(event) =>
+                      setRowData({ ...rowData, name: event.target.value })
+                    }
+                  />
+                ) : (
+                  rowData.name
+                )}
+              </Typography>
+            </TableCell>
+
+            <TableCell align="center">
+              <Typography>
+                {inEditMode.status && inEditMode.rowKey === row.id ? (
+                  <TextField
+                    required
+                    id="standard-required"
+                    label="Required"
+                    value={rowData.description}
+                    onChange={(event) =>
+                      setRowData({
+                        ...rowData,
+                        description: event.target.value,
+                      })
+                    }
+                  />
+                ) : (
+                  rowData.description
+                )}
+              </Typography>
+            </TableCell>
+            <TableCell align="center">
+              <Typography>
+                {inEditMode.status && inEditMode.rowKey === row.id ? (
+                  <TextField
+                    disabled
+                    id="standard-disabled"
+                    label="Disabled"
+                    defaultValue={row.createdOnDate}
+                  />
+                ) : (
+                  row.createdOnDate
+                )}
+              </Typography>
+            </TableCell>
+            <TableCell align="center">
+              <Typography>
+                {inEditMode.status && inEditMode.rowKey === row.id ? (
+                  <TextField
+                    disabled
+                    id="standard-disabled"
+                    label="Disabled"
+                    defaultValue={row.createdByUser}
+                  />
+                ) : (
+                  row.createdByUser
+                )}
+              </Typography>
+            </TableCell>
+            <TableCell align="center">
+              <Typography>
+                {inEditMode.status && inEditMode.rowKey === row.id ? (
+                  <TextField
+                    disabled
+                    id="standard-disabled"
+                    label="Disabled"
+                    defaultValue={row.updatedOnDate}
+                  />
+                ) : (
+                  row.updatedOnDate
+                )}
+              </Typography>
+            </TableCell>
+            <TableCell align="center">
+              <Typography>
+                {inEditMode.status && inEditMode.rowKey === row.id ? (
+                  <TextField
+                    disabled
+                    id="standard-disabled"
+                    label="Disabled"
+                    defaultValue={row.updatedByUser}
+                  />
+                ) : (
+                  row.updatedByUser
+                )}
+              </Typography>
+            </TableCell>
+          </TableRow>
+
+          <TableRow className={classes.row}>
+            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+              <Collapse in={open} timeout="auto" unmountOnExit>
+                <Box margin={1}>
+                  <Typography variant="h6" gutterBottom component="div">
+                    Stages
+                  </Typography>
+                  <Table size="small" aria-label="purchases">
+                    <TableBody>
+                   
+                    {jobs
+                        ? user.map((row) => (
+                            <StageDetailList
+                              key={row.id}
+                              row={row}
+                            />
+                          ))
+                        : null}
+                     
+                    </TableBody>
+                  </Table>
+                </Box>
+              </Collapse>
+            </TableCell>
+          </TableRow>
         </React.Fragment>
-      ) : null}
+      ): null}  
     </div>
   );
 };
-
 export default Stages;
+export  { GameContext};

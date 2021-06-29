@@ -15,9 +15,15 @@ import Paper from "@material-ui/core/Paper";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import DeleteOutlineRoundedIcon from "@material-ui/icons/DeleteOutlineRounded";
+import Tooltip from "@material-ui/core/Tooltip";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import TextField from "@material-ui/core/TextField";
+import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
 import axios from "axios";
 import StageDetailValue from "./StageDetailValue";
 import ShowStageDetailList from "./FakeServer";
+import {GameContext} from './Stages'
 
 const useRowStyles = makeStyles({
   root: {
@@ -27,54 +33,39 @@ const useRowStyles = makeStyles({
   },
 });
 
+
 const StageDetailList = (props) => {
-  const { row } = props;
+  console.log("\n\n\n\n");
+  console.log("propopps", props);
+  const rows = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
-  console.log("**Checkin if it's reaching");
-  console.log(row);
 
-  const [rows, setRows] = useState(row);
-  // const[nameDisplay,setNameDisplay]=useState({"stageName":rows.name
-  // })
+  const [inEditMode, setInEditMode] = useState({
+    status: false
+  });
+
+
+  console.log("**Checkin if it's reaching ", Date.now());
+
+  //console.log(props.row);
+  const [row, setRow] = useState(rows.row);
   const [user, setUser] = useState([]);
   const [fetchingUser, setFetchingUser] = useState(true);
-
-  const deleteStage = (id) => {
-    console.log("del");
-    console.log(id);
-    axios.delete(`http://localhost:3000/stages/${id}`).then(() => {
-      setRows(null);
-    });
-  };
-
-  // const updateStage=(row)=>{
-  //   axios.put(`http://localhost:3000/stages/${row.Id}`,{"stageName":rows.name})
-  //   row.stageName=rows.name
-  // //  row.description=jobs.description
-  //  console.log(row)
-  //  setNameDisplay({"name":jobs.name
-  // })
-  // }
-
-  // const deleteJob=(id)=>{console.log("del")
-  // console.log(id)
-
-  // const handleStageNameChange=(event)=>{
-  //   console.log(event.target.value);
-  //   const value_name=event.target.value;
-  //   const name=event.target.name;
-  //   console.log(value_name,name)
-  //   setRows(()=>{if(name==='stageName'){return{stageName:value_name}}
-  //   })
-  //  }
+  const [load, setLoad] = useState(true);
+ 
+ 
+  const [rowData, setRowData] = useState({
+    id: row.id,
+    name: row.name,
+    jobId: row.jobId,
+  });
 
   const updateData = (data) => {
-    var fakeServer = new ShowStageDetailList(data, row.stageId, row.jobId);
+    var fakeServer = new ShowStageDetailList(data, row.id, row.jobId);
     setUser(fakeServer);
-    console.log("stageDetailID's", fakeServer);
+    // console.log("stageDetailID's", fakeServer);
   };
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -86,13 +77,55 @@ const StageDetailList = (props) => {
     };
     if (fetchingUser) fetchUser();
   });
+ 
+
+  const updateInventory = async () => {
+    const data = rowData;
+    await axios
+      .put(`http://localhost:3000/stages/`, data)
+      .then((response) => console.log("stages -- ", response))
+      .then((json) => {
+        // reset inEditMode and unit price state values
+        row.name = rowData.name;
+        onCancel(1);
+        // fetch the updated data
+      });
+  };
+ 
+  const onEdit = (Id) => {
+    setInEditMode({
+      status: true
+    });
+  };
+  const deleteStage = (id) => {
+    console.log("del");
+    console.log(id);
+    axios.delete(`http://localhost:3000/stages/${id}`).then(() => {
+      setLoad(false)
+    });
+  };
+
+  const onSave = () => {
+    if (rowData.name !== row.name) updateInventory();
+  };
+
+  const onCancel = (check) => {
+    //reset the inEditMode state value
+    setInEditMode({
+      status: false
+    });
+    if (check === 0) {
+      setRowData(row);
+    }
+  };
 
   return (
     <div>
-      {rows ? (
+      {load ? (
         <React.Fragment>
-          <TableRow className={classes.root} className={classes.rowcolor}>
-            <TableCell>
+          <Table>
+            <TableRow className={classes.rowcolor}>
+            <TableCell component="th" scope="row" align="left">
               <IconButton
                 aria-label="expand row"
                 size="small"
@@ -100,50 +133,106 @@ const StageDetailList = (props) => {
               >
                 {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
               </IconButton>
-            </TableCell>
-            <TableCell component="th" scope="row">
-              {row.stageName}
-            </TableCell>
+              <Tooltip
+                title={
+                  inEditMode.status
+                    ? "Cancel"
+                    : "Edit"
+                }
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={inEditMode.status}
+                      style={{ marginLeft: 8 }}
+                      onChange={() => {
+                        inEditMode.status && inEditMode.rowKey === row.Id
+                          ? onCancel(0)
+                          : onEdit(row.Id);
+                      }}
+                      name="checkedA"
+                      color="primary"
+                      label="Cancel"
+                    />
+                  }
+                />
+              </Tooltip>
 
-            {/* <TableCell><input type="text" placeholder = "Edit Stage Name" name="stageName" onChange={handleStageNameChange}></input>
-               <button onClick={()=>updateStage(row)}>Update</button>
-          </TableCell> */}
-
-            <TableCell>
-              <button onClick={() => deleteStage(row.Id)}>
-                <DeleteOutlineRoundedIcon />
-              </button>
+              {inEditMode.status ? (
+                <>
+                  <Tooltip title="Save">
+                    <FormControlLabel
+                      control={
+                        <SaveOutlinedIcon
+                          onClick={() => onSave()}
+                        ></SaveOutlinedIcon>
+                      }
+                    />
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <FormControlLabel
+                      control={
+                        <DeleteOutlineRoundedIcon
+                          onClick={() => deleteStage(row.id)}
+                        ></DeleteOutlineRoundedIcon>
+                      }
+                    />
+                  </Tooltip>
+                </>
+              ) : null}
             </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-              <Collapse in={open} timeout="auto" unmountOnExit>
-                <Box margin={1}>
-                  <Typography variant="h6" gutterBottom component="div">
-                    Stage Detail Id
-                  </Typography>
-                  <Table size="small" aria-label="purchases">
-                    {/* <TableHead>
-                    <TableRow>
-                      <TableCell>Property</TableCell>
-                      <TableCell>Property Value</TableCell>
-                      
-                    </TableRow>
-                  </TableHead> */}
-                    <TableBody>
-                      {user.map((item) => (
-                        <StageDetailValue key={item.Id} row={item} />
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Box>
-              </Collapse>
-            </TableCell>
-          </TableRow>
+              <TableCell align="left">
+                <Typography>
+                  {inEditMode.status ? (
+                    <TextField
+                      required
+                      id="standard-required"
+                      label="Required"
+                      value={rowData.name}
+                      defaultValue=""
+                      onChange={(event) => {
+                        event.preventDefault();
+                        setRowData({
+                          ...rowData,
+                          name: event.target.value,
+                        });
+                      }}
+                    />
+                  ) : (
+                    row.name
+                  )}
+                </Typography>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell
+                style={{ paddingBottom: 0, paddingTop: 0 }}
+                colSpan={6}
+              >
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                  <Box margin={1}>
+                    <Typography gutterBottom component="div">
+                      Stage Detail Id
+                    </Typography>
+                    <Table size="small" aria-label="purchases">
+                      <TableBody>
+                        {user.map((item) => (
+                          <StageDetailValue
+                            key={item.ID}
+                            row={item}
+                          />
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Box>
+                </Collapse>
+              </TableCell>
+            </TableRow>
+          </Table>
         </React.Fragment>
       ) : null}
     </div>
   );
 };
 
-export default StageDetailList;
+export default React.memo(StageDetailList);
