@@ -29,6 +29,48 @@ exports.create =  (req, res) => {
   });
 };
 
+
+exports.addData = (req, res) => {
+  // Validate request
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  }
+ 
+  Job.addData(req.body, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the jaob."
+      });
+    else res.send(data);
+  });
+};
+
+
+
+exports.updateJson = (req, res) => {
+  // Validate request
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+  }
+ 
+  Job.updateJson(req.params.jobId, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the jaob."
+      });
+    else {
+    console.log("Reached here")
+  res.send(data)}
+  });
+};
+
+
 // Retrieve all jobs from the database.
 exports.findAll = (req, res) => {
   Job.getAll((err, data) => {
@@ -59,7 +101,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a job identified by the jobId in the request
-exports.update = (req, res) => {
+exports.update = async(req, res,next) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({
@@ -83,7 +125,8 @@ exports.update = (req, res) => {
             message: "Error updating job with id " + req.params.jobId
           });
         }
-      } else res.send(data);
+      } else {console.log(data);
+      next();};
     }
   );
 };

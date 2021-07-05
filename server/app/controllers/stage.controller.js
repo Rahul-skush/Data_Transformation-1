@@ -1,10 +1,12 @@
+
 const Stage = require("../models/stage.model.js");
+
 
 // create all stages
 exports.createAllStages = async (req, res, next) => {
-  console.log(req.body.data);
-  const jId = req.body.jobId;
-  const stages = req.body.data;
+  console.log(req.body.data)
+  const jId = req.body.jobId
+const stages=req.body.data
   const findStage = [];
   const stageNames = [];
   for (name in stages) {
@@ -15,7 +17,7 @@ exports.createAllStages = async (req, res, next) => {
   for (stageName in findStage) {
     var stageEntry = {
       name: findStage[stageName],
-      jobId: jId,
+      jobId: jId
     };
     await Stage.create(stageEntry, (err, data) => {
       if (err)
@@ -94,17 +96,17 @@ exports.update = (req, res) => {
     });
   }
 
-  console.log( req.body);
+  console.log(req.body);
 
-  Stage.updateById(req.body, (err, data) => {
+  Stage.updateById( req.body, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not foundStage with id ${req.body.id}. ${req}`,
+          message: `Not foundStage with id ${req.id}.`,
         });
       } else {
         res.status(500).send({
-          message: "Error updating stage with id " + req.body.id,
+          message: "Error updating stage with id " + req.id,
         });
       }
     } else res.send(data);
@@ -124,11 +126,16 @@ exports.delete = async (req, res, next) => {
           message: "Could not deleteStage with id " + req.params.stageId,
         });
       }
-    } else {
+    }
+    else {
       next();
     }
   });
 };
+
+
+
+
 
 // Delete allStages from the database.
 exports.deleteAll = (req, res, next) => {
@@ -140,7 +147,7 @@ exports.deleteAll = (req, res, next) => {
       });
     else {
       next();
-      // res.send({ message: `All Stages were deleted successfully!` });
+     // res.send({ message: `All Stages were deleted successfully!` });
     }
   });
 };
@@ -156,3 +163,4 @@ exports.deleteAllStages = (req, res) => {
     else res.send({ message: `All Stages were deleted successfully!` });
   });
 };
+

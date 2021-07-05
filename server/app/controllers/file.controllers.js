@@ -6,6 +6,12 @@ exports.fileData = (req, res) => {
       const file = req.files.file;
       console.log(file)
       const d = JSON.parse(file.data)
-    
+      console.log(d)
+      
       res.json({ fileName: file.name, filePath: `/uploads/${file.name}`, fileData: d });
+
+
+
+
+
   };

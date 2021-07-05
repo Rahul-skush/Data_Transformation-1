@@ -9,11 +9,11 @@ module.exports = app => {
   // Retrieve all Stages
   app.get("/stages", stages.findAll);
 
-  // Retrieve Stages by jobId
+  //Retrieve Stages by jobId
   app.get("/stages/:jobId", stages.findOne);
 
   // Update a Stage by stageId
-  app.put("/stages/", stages.update);
+  app.put("/stages", stages.update);
 
   // Delete a Stage by stageId
   app.delete("/stages/:stageId", stages.delete, stageDetail.delete);
@@ -23,4 +23,9 @@ module.exports = app => {
   
   // remove all stages from table
   app.delete("/stages/remove/", stages.deleteAllStages);
+
+
+
+
+
 };

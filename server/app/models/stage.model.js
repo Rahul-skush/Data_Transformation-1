@@ -1,8 +1,10 @@
-
 const sql = require("./db.js");
 const tableConfig = require("../config/table.config.js");
+const {
+  getDetailsOfStage,
+} = require("../controllers/stageDetail.controller.js");
 
-// constructor 
+// constructor
 const Stage = function (stage) {
   this.name = stage.name;
   this.jobId = stage.jobId;
@@ -22,6 +24,7 @@ Stage.create = (newStage, result) => {
   });
 };
 
+
 Stage.findById = (jobId, result) => {
   sql.query(
     `SELECT * FROM ${tableConfig.STAGES} WHERE jobId = ${jobId}`,
@@ -35,6 +38,7 @@ Stage.findById = (jobId, result) => {
 
       if (res.length) {
         console.log("found stage: ", res);
+  
         result(null, res);
         return;
       }
@@ -61,7 +65,7 @@ Stage.getAll = (result) => {
 Stage.updateById = (stage, result) => {
   sql.query(
     `UPDATE ${tableConfig.STAGES} SET name = ? WHERE id = ?`,
-    [stage.name, stage.id],
+    [stage.name, stage.stageId],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -132,7 +136,9 @@ Stage.removeAllStages = (result) => {
     console.log(`deleted ${res.affectedRows} stages`);
     result(null, res);
   });
+
 };
 
 module.exports = Stage;
+
 
