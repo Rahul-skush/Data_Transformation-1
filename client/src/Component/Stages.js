@@ -22,6 +22,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import StageDetailList from "./StageDetailList";
+import './Table.css'
 
 const useRowStyles = makeStyles({
   root: {
@@ -142,7 +143,7 @@ const Stages = (props) => {
   console.log(row.name + "hbjhhh " + user);
 
   return (
-    <div>
+       <React.Fragment>
       {jobs? (
           <React.Fragment>
           <TableRow className={classes.head}>
@@ -325,8 +326,7 @@ const Stages = (props) => {
           </TableRow>
         </React.Fragment>
       ): null}  
-    </div>
+      </React.Fragment>
   );
 };
 export default Stages;
-export  { GameContext};

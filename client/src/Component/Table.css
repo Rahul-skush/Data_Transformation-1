@@ -1,0 +1,8 @@
+p.MuiTypography-root.MuiTypography-body1 {
+    width: max-content;
+    font-size: .81rem;
+}
+
+.TextField{
+    height:20px
+}

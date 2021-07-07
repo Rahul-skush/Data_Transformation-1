@@ -21,8 +21,9 @@ import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { ShowStageDetailValue } from "./FakeServer";
-import {GameContext} from './Stages'
+
 import axios from "axios";
+import './Table.css'
 
 const useRowStyles = makeStyles({
   root: {

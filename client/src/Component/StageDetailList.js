@@ -23,7 +23,7 @@ import SaveOutlinedIcon from "@material-ui/icons/SaveOutlined";
 import axios from "axios";
 import StageDetailValue from "./StageDetailValue";
 import ShowStageDetailList from "./FakeServer";
-import {GameContext} from './Stages'
+import './Table.css'
 
 const useRowStyles = makeStyles({
   root: {
@@ -82,7 +82,7 @@ const StageDetailList = (props) => {
   const updateInventory = async () => {
     const data = rowData;
     await axios
-      .put(`http://localhost:3000/stages/`, data)
+      .put(`http://localhost:3000/stages/${data.jobId}`, data)
       .then((response) => console.log("stages -- ", response))
       .then((json) => {
         // reset inEditMode and unit price state values

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
+import {lighten, makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
@@ -17,6 +17,8 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import './Table.css'
 import Stages from "./Stages";
 import axios from "axios";
+
+
 
 const useRowStyles = makeStyles({
   head: {
@@ -44,8 +46,8 @@ export default function CollapsibleTable() {
   return (
     <TableContainer component={Paper}>
       <Typography variant="h5">Data Transformation</Typography>
-      <Table aria-label="collapsible table"  className = "main-table table-dense" >
-        <TableHead>
+      <Table aria-label="collapsible table" size="small"   >
+      <TableHead className = {classes.head}>
           <TableRow>
             <TableCell align="center">
               <Typography>actions</Typography>
