@@ -66,6 +66,7 @@ exports.updateJson = (req, res) => {
       });
     else {
     console.log("Reached here")
+    console.log("dataaat", data);
   res.send(data)}
   });
 };

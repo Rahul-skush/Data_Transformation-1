@@ -17,7 +17,7 @@ module.exports = app => {
     app.get("/jobs/:jobId", jobs.findOne);
   
     // Update a Job by jobId 
-    app.put("/jobs/:jobId", jobs.update,jobs.updateJson);
+    app.put("/jobs/:jobId", jobs.update, jobs.updateJson);
   
     // Delete a Job by jobId followed by deletion of corresponding stages and stagsDetails
     app.delete("/jobs/:jobId", jobs.delete, stages.deleteAll, stageDetail.delete);

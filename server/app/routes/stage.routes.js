@@ -1,5 +1,6 @@
 
 module.exports = app => {
+  const jobs = require("../controllers/job.controller.js");
   const stages = require("../controllers/stage.controller.js");
   const stageDetail = require("../controllers/stageDetail.controller.js");
 
@@ -13,7 +14,7 @@ module.exports = app => {
   app.get("/stages/:jobId", stages.findOne);
 
   // Update a Stage by stageId
-  app.put("/stages", stages.update);
+  app.put("/stages/:jobId", stages.update, jobs.updateJson);
 
   // Delete a Stage by stageId
   app.delete("/stages/:stageId", stages.delete, stageDetail.delete);

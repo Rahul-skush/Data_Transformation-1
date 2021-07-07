@@ -79,7 +79,8 @@ exports.updateStageDetail = async (req, res, next) => {
           console.log(err);
         }else console.log(data);
       });
-      res.send(req.body);
+      next();
+      res.send(req.body); 
     }
   } catch (err) {
     console.log(err);

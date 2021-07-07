@@ -88,7 +88,7 @@ exports.findOne = (req, res) => {
 };
 
 // Update a stage identified by the id in the request
-exports.update = (req, res) => {
+exports.update = async (req, res, next) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({
@@ -96,7 +96,7 @@ exports.update = (req, res) => {
     });
   }
 
-  console.log(req.body);
+  console.log("req stage", req.body);
 
   Stage.updateById( req.body, (err, data) => {
     if (err) {
@@ -109,7 +109,7 @@ exports.update = (req, res) => {
           message: "Error updating stage with id " + req.id,
         });
       }
-    } else res.send(data);
+    } else {next(); res.send(data); }
   });
 };
 
